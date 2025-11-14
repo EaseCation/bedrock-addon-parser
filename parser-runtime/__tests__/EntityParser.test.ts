@@ -17,7 +17,7 @@ describe('EntityParser', () => {
    * 辅助函数：读取测试文件
    */
   function loadTestFile(relativePath: string): string {
-    const filePath = path.join(__dirname, '../..', relativePath);
+    const filePath = path.join(__dirname, '..', relativePath);
     return fs.readFileSync(filePath, 'utf-8');
   }
 
@@ -91,7 +91,7 @@ describe('EntityParser', () => {
     });
 
     test('should use default version when format_version is missing', () => {
-      const json = loadTestFile('test/resources/entities/invalid/no_version.json');
+      const json = loadTestFile('resources/entities/invalid/no_version.json');
       const result = parser.parseEntity(json, 'entities/no_version.json');
 
       expect(result.version).toBe('1.16.100');
@@ -99,7 +99,7 @@ describe('EntityParser', () => {
     });
 
     test('should throw error when minecraft:entity is missing', () => {
-      const json = loadTestFile('test/resources/entities/invalid/missing_entity.json');
+      const json = loadTestFile('resources/entities/invalid/missing_entity.json');
 
       expect(() => {
         parser.parseEntity(json, 'entities/missing_entity.json');
@@ -107,7 +107,7 @@ describe('EntityParser', () => {
     });
 
     test('should throw error when identifier is missing', () => {
-      const json = loadTestFile('test/resources/entities/invalid/missing_identifier.json');
+      const json = loadTestFile('resources/entities/invalid/missing_identifier.json');
 
       expect(() => {
         parser.parseEntity(json, 'entities/missing_identifier.json');
@@ -175,7 +175,7 @@ describe('EntityParser', () => {
         },
         {
           path: 'entities/invalid2.json',
-          content: loadTestFile('test/resources/entities/invalid/missing_entity.json')
+          content: loadTestFile('resources/entities/invalid/missing_entity.json')
         }
       ];
 
