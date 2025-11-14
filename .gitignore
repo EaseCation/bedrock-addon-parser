@@ -38,8 +38,3 @@ parser-runtime/dist/
 
 # Java resources (generated)
 java/src/main/resources/bundle.js
-
-# Gradle wrapper
-java/gradle/
-java/gradlew
-java/gradlew.bat
