@@ -16,7 +16,7 @@
     "test": "npm run test:runtime",
     "test:runtime": "cd parser-runtime && npm test",
     "clean": "rm -rf node_modules schema-types/node_modules parser-runtime/node_modules schema-types/types schema-types/dist parser-runtime/dist",
-    "clean:all": "npm run clean && rm -rf .gradle java/build java/.gradle"
+    "clean:all": "npm run clean && rm -rf .gradle build"
   },
   "repository": {
     "type": "git",

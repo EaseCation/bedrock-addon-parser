@@ -1,0 +1,14 @@
+{
+  "format_version": "1.19.40",
+  "minecraft:block": {
+    "description": {
+      "identifier": "mypack:simple_stone"
+    },
+    "components": {
+      "minecraft:destroy_time": 3.0,
+      "minecraft:explosion_resistance": 15.0,
+      "minecraft:friction": 0.6,
+      "minecraft:block_light_emission": 0.0
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "format_version": "1.19.50",
+  "minecraft:item": {
+    "description": {
+      "identifier": "test:golden_apple_v1_19_50",
+      "category": "items"
+    },
+    "components": {
+      "minecraft:max_stack_size": 64,
+      "minecraft:icon": {
+        "texture": "golden_apple",
+        "frame": 0
+      },
+      "minecraft:food": {
+        "nutrition": 4,
+        "saturation_modifier": 9.6,
+        "can_always_eat": true,
+        "on_consume": {
+          "event": "apply_regeneration"
+        }
+      },
+      "minecraft:use_duration": 32,
+      "minecraft:foil": true
+    }
+  }
+}

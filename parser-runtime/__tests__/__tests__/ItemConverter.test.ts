@@ -2,8 +2,8 @@
  * ItemConverter 单元测试
  */
 
-import { ItemConverter } from '../../../main/typescript/converter/ItemConverter';
-import type { StandardItem } from '../../../main/typescript/index';
+import { ItemConverter } from '../../src/typescript/converter/ItemConverter';
+import type { StandardItem } from '../../src/typescript/index';
 import * as fs from 'fs';
 import * as path from 'path';
 

@@ -2,7 +2,7 @@
  * EntityParser 单元测试
  */
 
-import { EntityParser } from '../../../main/typescript/parser/EntityParser';
+import { EntityParser } from '../../src/typescript/parser/EntityParser';
 import * as fs from 'fs';
 import * as path from 'path';
 

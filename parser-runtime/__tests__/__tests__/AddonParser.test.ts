@@ -2,7 +2,7 @@
  * AddonParser 端到端测试
  */
 
-import { parseAddon, JsonFile } from '../../../main/typescript/index';
+import { parseAddon, JsonFile } from '../../src/typescript/index';
 import * as fs from 'fs';
 import * as path from 'path';
 

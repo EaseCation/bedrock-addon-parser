@@ -1,0 +1,64 @@
+{
+  "format_version": "1.21.60",
+  "minecraft:entity": {
+    "description": {
+      "identifier": "test:transforming_mob",
+      "is_spawnable": true
+    },
+    "components": {
+      "minecraft:health": {
+        "value": 10,
+        "max": 10
+      },
+      "minecraft:scale": {
+        "value": 0.5
+      }
+    },
+    "component_groups": {
+      "test:adult_group": {
+        "minecraft:scale": {
+          "value": 1.0
+        },
+        "minecraft:attack_damage": {
+          "value": 5.0
+        }
+      },
+      "test:baby_group": {
+        "minecraft:scale": {
+          "value": 0.5
+        },
+        "minecraft:is_baby": {}
+      },
+      "test:angry_group": {
+        "minecraft:angry": {
+          "duration": 25,
+          "broadcast_anger": true
+        }
+      }
+    },
+    "events": {
+      "test:grow_up": {
+        "add": {
+          "component_groups": ["test:adult_group"]
+        },
+        "remove": {
+          "component_groups": ["test:baby_group"]
+        }
+      },
+      "test:become_angry": {
+        "add": {
+          "component_groups": ["test:angry_group"]
+        },
+        "filters": {
+          "test": "is_daytime",
+          "value": true
+        }
+      },
+      "test:calm_down": {
+        "remove": {
+          "component_groups": ["test:angry_group"]
+        }
+      }
+    }
+  }
+}

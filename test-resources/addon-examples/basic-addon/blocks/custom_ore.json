@@ -1,0 +1,21 @@
+{
+  "format_version": "1.19.40",
+  "minecraft:block": {
+    "description": {
+      "identifier": "test:custom_ruby_ore"
+    },
+    "components": {
+      "minecraft:destroy_time": 3.0,
+      "minecraft:explosion_resistance": 3.0,
+      "minecraft:friction": 0.6,
+      "minecraft:block_light_emission": 0.0,
+      "minecraft:geometry": "geometry.ore",
+      "minecraft:material_instances": {
+        "*": {
+          "texture": "ruby_ore",
+          "render_method": "opaque"
+        }
+      }
+    }
+  }
+}

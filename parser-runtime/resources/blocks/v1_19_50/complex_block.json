@@ -1,0 +1,46 @@
+{
+  "format_version": "1.19.50",
+  "minecraft:block": {
+    "description": {
+      "identifier": "mypack:complex_lamp",
+      "states": {
+        "mypack:lit": [false, true]
+      }
+    },
+    "components": {
+      "minecraft:geometry": "geometry.lamp",
+      "minecraft:material_instances": {
+        "*": {
+          "texture": "lamp_off",
+          "render_method": "opaque"
+        }
+      },
+      "minecraft:collision_box": {
+        "origin": [-4, 0, -4],
+        "size": [8, 12, 8]
+      },
+      "minecraft:selection_box": {
+        "origin": [-4, 0, -4],
+        "size": [8, 12, 8]
+      },
+      "minecraft:light_emission": 0,
+      "minecraft:on_interact": {
+        "event": "toggle_lamp",
+        "target": "self"
+      }
+    },
+    "permutations": [
+      {
+        "condition": "q.block_state('mypack:lit') == true",
+        "components": {
+          "minecraft:light_emission": 15,
+          "minecraft:material_instances": {
+            "*": {
+              "texture": "lamp_on"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

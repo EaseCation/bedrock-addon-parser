@@ -2,7 +2,7 @@
  * BlockParser 单元测试
  */
 
-import { BlockParser } from '../../../main/typescript/parser/BlockParser';
+import { BlockParser } from '../../src/typescript/parser/BlockParser';
 import * as fs from 'fs';
 import * as path from 'path';
 

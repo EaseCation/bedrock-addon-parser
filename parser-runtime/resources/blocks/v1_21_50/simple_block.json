@@ -1,0 +1,25 @@
+{
+  "format_version": "1.21.50",
+  "minecraft:block": {
+    "description": {
+      "identifier": "test:custom_block_v1_21_50"
+    },
+    "components": {
+      "minecraft:destructible_by_mining": {
+        "seconds_to_destroy": 3.0
+      },
+      "minecraft:destructible_by_explosion": {
+        "explosion_resistance": 10.0
+      },
+      "minecraft:friction": 0.6,
+      "minecraft:light_emission": 8,
+      "minecraft:geometry": "geometry.custom_block",
+      "minecraft:material_instances": {
+        "*": {
+          "texture": "custom_texture",
+          "render_method": "alpha_test"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "format_version": "1.19.40",
+  "minecraft:block": {
+    "description": {
+      "identifier": "mypack:edge_case_block"
+    },
+    "components": {
+      "minecraft:friction": 0.8,
+      "minecraft:block_light_emission": 0.5
+    }
+  }
+}

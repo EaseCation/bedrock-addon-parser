@@ -1,0 +1,29 @@
+{
+  "format_version": "1.20.41",
+  "minecraft:item": {
+    "description": {
+      "identifier": "test:enchanted_bow_v1_20_41",
+      "menu_category": {
+        "category": "equipment"
+      }
+    },
+    "components": {
+      "minecraft:max_stack_size": 1,
+      "minecraft:max_damage": 384,
+      "minecraft:hand_equipped": false,
+      "minecraft:icon": "bow",
+      "minecraft:foil": true,
+      "minecraft:shooter": {
+        "ammunition": [
+          {
+            "item": "minecraft:arrow"
+          }
+        ],
+        "charge_on_draw": true,
+        "max_draw_duration": 1.0,
+        "scale_power_by_draw_duration": true,
+        "launch_power_scale": 1.0
+      }
+    }
+  }
+}

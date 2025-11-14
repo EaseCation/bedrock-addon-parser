@@ -2,7 +2,7 @@
  * EntityUpgrader 单元测试
  */
 
-import { EntityUpgrader } from '../../../main/typescript/upgrader/EntityUpgrader';
+import { EntityUpgrader } from '../../src/typescript/upgrader/EntityUpgrader';
 import * as fs from 'fs';
 import * as path from 'path';
 

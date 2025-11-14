@@ -1,0 +1,19 @@
+{
+  "format_version": "1.19.0",
+  "minecraft:block": {
+    "description": {
+      "identifier": "test:legacy_block_v1_19_0"
+    },
+    "components": {
+      "minecraft:destroy_time": 2.0,
+      "minecraft:explosion_resistance": 10.0,
+      "minecraft:friction": 0.6,
+      "minecraft:block_light_emission": 0.5,
+      "minecraft:block_light_filter": 15,
+      "minecraft:breathability": "solid",
+      "minecraft:creative_category": {
+        "category": "construction"
+      }
+    }
+  }
+}

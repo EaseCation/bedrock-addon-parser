@@ -2,7 +2,7 @@
  * ItemUpgrader 单元测试
  */
 
-import { ItemUpgrader } from '../../../main/typescript/upgrader/ItemUpgrader';
+import { ItemUpgrader } from '../../src/typescript/upgrader/ItemUpgrader';
 import * as fs from 'fs';
 import * as path from 'path';
 

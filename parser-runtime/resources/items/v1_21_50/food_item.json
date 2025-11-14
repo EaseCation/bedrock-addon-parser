@@ -1,0 +1,25 @@
+{
+  "format_version": "1.21.50",
+  "minecraft:item": {
+    "description": {
+      "identifier": "test:cooked_beef_v1_21_50",
+      "menu_category": {
+        "category": "items"
+      }
+    },
+    "components": {
+      "minecraft:max_stack_size": {
+        "value": 64
+      },
+      "minecraft:icon": "cooked_beef",
+      "minecraft:food": {
+        "nutrition": 8,
+        "saturation_modifier": 12.8
+      },
+      "minecraft:use_modifiers": {
+        "use_duration": 1.6,
+        "movement_modifier": 0.0
+      }
+    }
+  }
+}

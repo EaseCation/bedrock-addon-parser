@@ -1,0 +1,27 @@
+{
+  "format_version": "1.20.81",
+  "minecraft:block": {
+    "description": {
+      "identifier": "test:pressure_plate_v1_20_81"
+    },
+    "components": {
+      "minecraft:destructible_by_mining": {
+        "seconds_to_destroy": 0.5
+      },
+      "minecraft:destructible_by_explosion": {
+        "explosion_resistance": 0.5
+      },
+      "minecraft:friction": 0.6,
+      "minecraft:light_emission": 0,
+      "minecraft:on_step_on": {
+        "event": "activate_pressure_plate"
+      },
+      "minecraft:on_step_off": {
+        "event": "deactivate_pressure_plate"
+      },
+      "minecraft:on_interact": {
+        "event": "player_interact"
+      }
+    }
+  }
+}

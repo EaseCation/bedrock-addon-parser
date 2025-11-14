@@ -1,0 +1,39 @@
+{
+  "format_version": "1.21.50",
+  "minecraft:entity": {
+    "description": {
+      "identifier": "test:lookat_mob",
+      "is_spawnable": true
+    },
+    "components": {
+      "minecraft:health": {
+        "value": 10,
+        "max": 10
+      },
+      "minecraft:behavior.lookat": {
+        "priority": 8,
+        "look_at_player": true,
+        "angle_of_view_horizontal": 180
+      }
+    },
+    "component_groups": {
+      "test:active_group": {
+        "minecraft:behavior.lookat": {
+          "priority": 5,
+          "look_at_player": true
+        }
+      }
+    },
+    "events": {
+      "test:activate": {
+        "add": {
+          "component_groups": ["test:active_group"]
+        },
+        "filters": {
+          "test": "is_daytime",
+          "value": true
+        }
+      }
+    }
+  }
+}

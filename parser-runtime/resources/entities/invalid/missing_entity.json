@@ -1,0 +1,8 @@
+{
+  "format_version": "1.16.0",
+  "invalid_key": {
+    "description": {
+      "identifier": "test:invalid"
+    }
+  }
+}

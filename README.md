@@ -161,7 +161,6 @@ bedrock-addon-parser/
 #### 使用 Gradle（推荐）
 
 ```bash
-cd java
 ./gradlew build
 ```
 
@@ -180,7 +179,7 @@ npm run generate
 npm run build
 
 # 4. 构建 Java
-cd java && ./gradlew build
+./gradlew build
 ```
 
 ### 优化构建
@@ -199,7 +198,7 @@ types目录存在时会自动跳过生成：
 npm test
 
 # Java 测试
-cd java && ./gradlew test
+./gradlew test
 
 # 仅构建不测试
 ./gradlew build -x npmTest
@@ -209,7 +208,7 @@ cd java && ./gradlew test
 
 ```bash
 # 清理所有构建产物
-cd java && ./gradlew clean
+./gradlew clean
 
 # 或使用 npm
 npm run clean

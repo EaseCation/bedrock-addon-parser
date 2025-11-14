@@ -1,0 +1,9 @@
+{
+  "format_version": "1.21.60",
+  "minecraft:block": {
+    "description": {
+      "identifier": "mypack:minimal_block"
+    },
+    "components": {}
+  }
+}

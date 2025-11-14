@@ -1,0 +1,18 @@
+{
+  "format_version": "1.19.40",
+  "minecraft:item": {
+    "description": {
+      "identifier": "mypack:enchanted_sword",
+      "category": "equipment"
+    },
+    "components": {
+      "minecraft:max_stack_size": 1,
+      "minecraft:max_damage": 1000,
+      "minecraft:hand_equipped": true,
+      "minecraft:foil": true,
+      "minecraft:icon": {
+        "texture": "enchanted_sword"
+      }
+    }
+  }
+}

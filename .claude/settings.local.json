@@ -13,7 +13,8 @@
       "Bash(cat:*)",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:gist.github.com)",
-      "WebFetch(domain:wiki.bedrock.dev)"
+      "WebFetch(domain:wiki.bedrock.dev)",
+      "Bash(./gradlew:*)"
     ],
     "deny": [],
     "ask": []

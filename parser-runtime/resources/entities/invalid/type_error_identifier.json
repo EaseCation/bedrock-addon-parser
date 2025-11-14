@@ -1,0 +1,13 @@
+{
+  "format_version": "1.21.60",
+  "minecraft:entity": {
+    "description": {
+      "identifier": 12345
+    },
+    "components": {
+      "minecraft:health": {
+        "value": 20
+      }
+    }
+  }
+}

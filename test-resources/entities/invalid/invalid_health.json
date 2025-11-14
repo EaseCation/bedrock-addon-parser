@@ -1,0 +1,13 @@
+{
+  "format_version": "1.21.60",
+  "minecraft:entity": {
+    "description": {
+      "identifier": "test:invalid_health_entity"
+    },
+    "components": {
+      "minecraft:health": {
+        "value": "not_a_number"
+      }
+    }
+  }
+}

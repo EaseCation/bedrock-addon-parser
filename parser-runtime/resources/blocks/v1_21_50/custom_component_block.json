@@ -1,0 +1,22 @@
+{
+  "format_version": "1.21.50",
+  "minecraft:block": {
+    "description": {
+      "identifier": "test:advanced_block_v1_21_50"
+    },
+    "components": {
+      "minecraft:destructible_by_mining": {
+        "seconds_to_destroy": 5.0
+      },
+      "minecraft:destructible_by_explosion": {
+        "explosion_resistance": 30.0
+      },
+      "minecraft:friction": 0.4,
+      "minecraft:light_emission": 15,
+      "minecraft:custom_components": [
+        "custom:block_behavior",
+        "custom:tick_handler"
+      ]
+    }
+  }
+}

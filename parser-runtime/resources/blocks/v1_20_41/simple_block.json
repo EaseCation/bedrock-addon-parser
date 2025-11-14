@@ -1,0 +1,22 @@
+{
+  "format_version": "1.20.41",
+  "minecraft:block": {
+    "description": {
+      "identifier": "test:oak_planks_v1_20_41"
+    },
+    "components": {
+      "minecraft:destructible_by_mining": {
+        "seconds_to_destroy": 2.0
+      },
+      "minecraft:destructible_by_explosion": {
+        "explosion_resistance": 3.0
+      },
+      "minecraft:friction": 0.6,
+      "minecraft:light_emission": 0,
+      "minecraft:flammable": {
+        "catch_chance_modifier": 5,
+        "destroy_chance_modifier": 20
+      }
+    }
+  }
+}

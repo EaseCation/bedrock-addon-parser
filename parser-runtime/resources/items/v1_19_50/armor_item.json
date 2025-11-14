@@ -1,0 +1,23 @@
+{
+  "format_version": "1.19.50",
+  "minecraft:item": {
+    "description": {
+      "identifier": "test:diamond_chestplate_v1_19_50",
+      "category": "equipment"
+    },
+    "components": {
+      "minecraft:max_stack_size": 1,
+      "minecraft:max_damage": 528,
+      "minecraft:icon": {
+        "texture": "diamond_chestplate"
+      },
+      "minecraft:armor": {
+        "protection": 8,
+        "texture_type": "diamond"
+      },
+      "minecraft:knockback_resistance": {
+        "protection": 0.0
+      }
+    }
+  }
+}

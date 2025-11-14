@@ -2,7 +2,7 @@
  * BlockUpgrader 单元测试
  */
 
-import { BlockUpgrader } from '../../../main/typescript/upgrader/BlockUpgrader';
+import { BlockUpgrader } from '../../src/typescript/upgrader/BlockUpgrader';
 import * as fs from 'fs';
 import * as path from 'path';
 

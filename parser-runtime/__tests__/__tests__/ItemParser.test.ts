@@ -2,7 +2,7 @@
  * ItemParser 单元测试
  */
 
-import { ItemParser } from '../../../main/typescript/parser/ItemParser';
+import { ItemParser } from '../../src/typescript/parser/ItemParser';
 import * as fs from 'fs';
 import * as path from 'path';
 

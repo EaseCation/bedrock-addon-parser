@@ -2,8 +2,8 @@
  * EntityConverter 单元测试
  */
 
-import { EntityConverter } from '../../../main/typescript/converter/EntityConverter';
-import type { StandardEntity } from '../../../main/typescript/index';
+import { EntityConverter } from '../../src/typescript/converter/EntityConverter';
+import type { StandardEntity } from '../../src/typescript/index';
 import * as fs from 'fs';
 import * as path from 'path';
 

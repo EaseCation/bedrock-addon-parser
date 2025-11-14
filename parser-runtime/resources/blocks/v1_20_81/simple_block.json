@@ -1,0 +1,33 @@
+{
+  "format_version": "1.20.81",
+  "minecraft:block": {
+    "description": {
+      "identifier": "test:crafting_table_v1_20_81"
+    },
+    "components": {
+      "minecraft:destructible_by_mining": {
+        "seconds_to_destroy": 2.5
+      },
+      "minecraft:destructible_by_explosion": {
+        "explosion_resistance": 2.5
+      },
+      "minecraft:friction": 0.6,
+      "minecraft:light_emission": 0,
+      "minecraft:geometry": "geometry.crafting_table",
+      "minecraft:material_instances": {
+        "*": {
+          "texture": "crafting_table_side",
+          "render_method": "opaque"
+        },
+        "up": {
+          "texture": "crafting_table_top",
+          "render_method": "opaque"
+        },
+        "down": {
+          "texture": "crafting_table_bottom",
+          "render_method": "opaque"
+        }
+      }
+    }
+  }
+}

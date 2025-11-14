@@ -1,0 +1,10 @@
+{
+  "minecraft:block": {
+    "description": {
+      "identifier": "test:invalid_no_version"
+    },
+    "components": {
+      "minecraft:friction": 0.6
+    }
+  }
+}
