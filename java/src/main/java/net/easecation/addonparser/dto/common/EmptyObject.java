@@ -1,4 +1,4 @@
-package net.easecation.addonparser.dto;
+package net.easecation.addonparser.dto.common;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

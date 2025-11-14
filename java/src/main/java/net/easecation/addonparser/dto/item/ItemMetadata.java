@@ -1,4 +1,4 @@
-package net.easecation.addonparser.dto;
+package net.easecation.addonparser.dto.item;
 
 import java.util.List;
 

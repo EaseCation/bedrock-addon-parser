@@ -1,6 +1,9 @@
 package net.easecation.addonparser.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import net.easecation.addonparser.dto.block.StandardBlock;
+import net.easecation.addonparser.dto.entity.StandardEntity;
+import net.easecation.addonparser.dto.item.StandardItem;
 
 import javax.annotation.Nullable;
 import java.util.List;
