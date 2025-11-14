@@ -284,10 +284,22 @@ export class ItemConverter extends StandardConverter {
 
   /**
    * 提取稀有度
+   * 支持两种格式：
+   * - 直接字符串：'common' | 'uncommon' | 'rare' | 'epic'
+   * - 对象格式：{ value: 'common' | 'uncommon' | 'rare' | 'epic' }
    */
   private static extractRarity(component: any): string | undefined {
-    if (!component || typeof component !== 'object') return undefined;
-    return typeof component.value === 'string' ? component.value : undefined;
+    // 直接字符串格式（新版本）
+    if (typeof component === 'string') {
+      return component;
+    }
+
+    // 对象格式（旧版本）
+    if (typeof component === 'object' && component?.value) {
+      return typeof component.value === 'string' ? component.value : undefined;
+    }
+
+    return undefined;
   }
 
   /**

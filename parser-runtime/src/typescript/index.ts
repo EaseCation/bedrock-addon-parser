@@ -39,7 +39,7 @@ export interface StandardBlock {
   isSolid?: boolean;
   canContainLiquid?: boolean;
   geometry?: string;
-  materialInstances?: Record<string, any>;
+  materialInstances?: Record<string, MaterialInstance>;
   collisionBox?: BoundingBox;
   selectionBox?: BoundingBox;
   components?: Record<string, any>;
@@ -159,8 +159,8 @@ export interface StandardEntity {
 
   // 保留字段
   components?: Record<string, any>;
-  componentGroups?: Record<string, Record<string, any>>;
-  events?: Record<string, any>;
+  componentGroups?: Record<string, ComponentGroup>;
+  events?: Record<string, EntityEvent>;
 
   // 元数据
   metadata: EntityMetadata;
@@ -171,9 +171,79 @@ export interface BoundingBox {
   size: number[];    // [width, height, depth]
 }
 
+/**
+ * 材质实例（Material Instance）
+ * 定义方块面的材质和渲染属性
+ *
+ * 原始 JSON 中可以是字符串或对象，标准化后统一为对象结构
+ */
+export interface MaterialInstance {
+  /** 纹理名称（如 "stone", "grass_side"） */
+  texture: string | null;
+
+  /**
+   * 环境光遮蔽
+   * 可以是布尔值（启用/禁用）或数值（0.0-1.0 遮蔽强度）
+   */
+  ambientOcclusion: boolean | number | null;
+
+  /** 面向调光（根据面的朝向调整亮度） */
+  faceDimming: boolean | null;
+
+  /** 渲染方法 */
+  renderMethod: 'opaque' | 'double_sided' | 'blend' | 'alpha_test' | 'alpha_test_single_sided' | null;
+}
+
 export interface EntityCollisionBox {
   width: number;   // 碰撞箱宽度（X/Z 轴）
   height: number;  // 碰撞箱高度（Y 轴）
+}
+
+/**
+ * 组件组 (Component Group)
+ * 用于实体的动态行为系统
+ */
+export interface ComponentGroup {
+  /** 组件字典 */
+  components?: Record<string, any>;
+}
+
+/**
+ * 实体事件 (Entity Event)
+ * 定义实体响应特定触发条件时的行为
+ */
+export interface EntityEvent {
+  /** 添加组件组 */
+  add?: ComponentGroupChange;
+  /** 移除组件组 */
+  remove?: ComponentGroupChange;
+  /** 随机化选择 */
+  randomize?: RandomizeEvent[];
+  /** 序列执行 */
+  sequence?: SequenceEvent[];
+  /** 触发其他事件 */
+  trigger?: string;
+}
+
+/** 组件组变更操作 */
+export interface ComponentGroupChange {
+  componentGroups?: string[];
+}
+
+/** 随机化事件选项 */
+export interface RandomizeEvent {
+  weight: number;
+  add?: ComponentGroupChange;
+  remove?: ComponentGroupChange;
+  trigger?: string;
+}
+
+/** 序列事件步骤 */
+export interface SequenceEvent {
+  add?: ComponentGroupChange;
+  remove?: ComponentGroupChange;
+  trigger?: string;
+  filters?: any;
 }
 
 export interface BlockMetadata {

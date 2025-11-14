@@ -243,13 +243,13 @@ public record StandardEntity(
          * 组件组定义（用于动态添加/移除组件）
          * 例如：{"minecraft:zombie_adult": {...}, "minecraft:zombie_baby": {...}}
          */
-        @JsonProperty("componentGroups") @Nullable Map<String, Map<String, Object>> componentGroups,
+        @JsonProperty("componentGroups") @Nullable Map<String, ComponentGroup> componentGroups,
 
         /**
          * 事件定义（用于触发组件组切换）
          * 例如：{"minecraft:entity_born": {...}, "minecraft:entity_transformed": {...}}
          */
-        @JsonProperty("events") @Nullable Map<String, Object> events,
+        @JsonProperty("events") @Nullable Map<String, EntityEvent> events,
 
         // ========== 元数据 ==========
         /**

@@ -15,7 +15,8 @@
       "WebFetch(domain:gist.github.com)",
       "WebFetch(domain:wiki.bedrock.dev)",
       "Bash(./gradlew:*)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(npm run build:tsc:*)"
     ],
     "deny": [],
     "ask": []

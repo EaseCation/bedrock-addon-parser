@@ -338,7 +338,15 @@ describe('BlockConverter', () => {
 
       const result = BlockConverter.convertToStandard(blockData, createMetadata());
 
-      expect(result[0].materialInstances).toEqual(materialInstances);
+      // 验证归一化后的结构
+      expect(result[0].materialInstances).toEqual({
+        '*': {
+          texture: 'custom_block',
+          ambientOcclusion: null,
+          faceDimming: null,
+          renderMethod: 'opaque'
+        }
+      });
     });
 
     test('should preserve complete components object', () => {

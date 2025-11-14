@@ -22,6 +22,13 @@ public record ItemMetadata(
      * 警告信息列表
      * 记录升级过程中的警告（如废弃组件、数据丢失等）
      */
-    List<String> warnings
+    List<String> warnings,
+
+    /**
+     * 源文件路径
+     * 记录该 Item 在 Addon 包中的相对路径
+     * 例如：items/my_item.json
+     */
+    String sourceFile
 ) {
 }

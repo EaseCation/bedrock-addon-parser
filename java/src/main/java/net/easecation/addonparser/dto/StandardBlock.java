@@ -34,7 +34,7 @@ public record StandardBlock(
 
         // 视觉属性
         @JsonProperty("geometry") @Nullable String geometry,
-        @JsonProperty("materialInstances") @Nullable Map<String, Object> materialInstances,
+        @JsonProperty("materialInstances") @Nullable Map<String, MaterialInstance> materialInstances,
         @JsonProperty("collisionBox") @Nullable BoundingBox collisionBox,
         @JsonProperty("selectionBox") @Nullable BoundingBox selectionBox,
 

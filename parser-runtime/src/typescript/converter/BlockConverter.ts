@@ -65,7 +65,7 @@ export class BlockConverter extends StandardConverter {
 
       // 视觉属性
       geometry: this.extractGeometry(components['minecraft:geometry']) ?? undefined,
-      materialInstances: components['minecraft:material_instances'] || undefined,
+      materialInstances: this.normalizeMaterialInstances(components['minecraft:material_instances']) ?? undefined,
       collisionBox: this.extractBoundingBox(components['minecraft:collision_box']) ?? undefined,
       selectionBox: this.extractBoundingBox(components['minecraft:selection_box']) ?? undefined,
 
@@ -171,5 +171,50 @@ export class BlockConverter extends StandardConverter {
     }
 
     return undefined;
+  }
+
+  /**
+   * 归一化材质实例
+   * 将 string | object 多态类型统一转换为固定的对象结构
+   *
+   * 转换规则：
+   * - 字符串 "stone" → { texture: "stone", ambientOcclusion: null, ... }
+   * - 对象 {...} → 规范化所有字段，缺失字段设为 null
+   *
+   * @param raw 原始 material_instances 组件
+   * @returns 归一化后的材质实例字典
+   */
+  private static normalizeMaterialInstances(
+    raw: any
+  ): Record<string, import('../index').MaterialInstance> | undefined {
+    if (!raw || typeof raw !== 'object') {
+      return undefined;
+    }
+
+    const result: Record<string, import('../index').MaterialInstance> = {};
+
+    for (const [face, value] of Object.entries(raw)) {
+      // 简单字符串格式 → 完整对象
+      if (typeof value === 'string') {
+        result[face] = {
+          texture: value,
+          ambientOcclusion: null,
+          faceDimming: null,
+          renderMethod: null
+        };
+      }
+      // 对象格式 → 规范化所有字段
+      else if (typeof value === 'object' && value !== null) {
+        const obj = value as any;
+        result[face] = {
+          texture: obj.texture ?? null,
+          ambientOcclusion: obj.ambient_occlusion ?? null,
+          faceDimming: obj.face_dimming ?? null,
+          renderMethod: obj.render_method ?? null
+        };
+      }
+    }
+
+    return Object.keys(result).length > 0 ? result : undefined;
   }
 }
