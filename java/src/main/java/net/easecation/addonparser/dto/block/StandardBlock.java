@@ -38,6 +38,13 @@ public record StandardBlock(
         @JsonProperty("collisionBox") @Nullable BoundingBox collisionBox,
         @JsonProperty("selectionBox") @Nullable BoundingBox selectionBox,
 
+        // 游戏机制属性
+        @JsonProperty("lootTable") @Nullable String lootTable,
+        @JsonProperty("flammable") @Nullable FlammableProperties flammable,
+        @JsonProperty("mapColor") @Nullable MapColor mapColor,
+        @JsonProperty("placementFilter") @Nullable PlacementFilter placementFilter,
+        @JsonProperty("breathability") @Nullable Breathability breathability,
+
         // 高级组件（保留原始结构）
         @JsonProperty("components") @Nullable Map<String, Object> components,
 

@@ -8,14 +8,17 @@
 // 示例 1: 使用最新版本的 Items 类型
 // ==============================================
 
-import { Item as Item_Latest } from '../types/behavior/items/v1_21_60';
+import { Item as Item_v1_21_60 } from '../types/behavior/items/v1_21_60/Items';
 
-const customSword: Item_Latest = {
+const customSword: Item_v1_21_60 = {
   format_version: '1.21.60',
   'minecraft:item': {
     description: {
       identifier: 'mypack:custom_sword',
-      category: 'equipment'
+      menu_category: {
+        category: 'equipment',
+        group: 'itemGroup.name.sword'
+      }
     },
     components: {
       'minecraft:max_stack_size': 1,
@@ -36,16 +39,18 @@ const customSword: Item_Latest = {
 // 示例 2: 使用历史版本的类型
 // ==============================================
 
-import { Item as Item_1_20_81 } from '../types/behavior/items/v1_20_81';
+import { Item as Item_v1_20_81 } from '../types/behavior/items/v1_20_81/Items';
 
-const oldItem: Item_1_20_81 = {
+const oldItem: Item_v1_20_81 = {
   format_version: '1.20.81',
   'minecraft:item': {
     description: {
       identifier: 'mypack:old_item'
     },
     components: {
-      'minecraft:max_stack_size': 64
+      'minecraft:max_stack_size': {
+        value: 64
+      }
     }
   }
 };
@@ -57,29 +62,41 @@ const oldItem: Item_1_20_81 = {
 /**
  * 将旧版本的 item 迁移到新版本
  */
-function migrateItemTo1_21_60(oldItem: Item_1_20_81): Item_Latest {
-  return {
+function migrateItemTo1_21_60(oldItem: Item_v1_20_81): Item_v1_21_60 {
+  // 创建新版本的 item，注意类型可能不完全兼容，需要手动转换
+  const newItem: Item_v1_21_60 = {
     format_version: '1.21.60',
     'minecraft:item': {
-      ...oldItem['minecraft:item'],
-      // 添加新版本的特性
-      components: {
-        ...oldItem['minecraft:item'].components,
-        // 新版本可能有新的组件
-      }
+      description: {
+        identifier: oldItem['minecraft:item'].description.identifier,
+        menu_category: oldItem['minecraft:item'].description.menu_category
+      },
+      components: {}
     }
   };
+
+  // 手动迁移 components（因为类型可能有细微差别）
+  const oldComponents = oldItem['minecraft:item'].components;
+  if (oldComponents) {
+    if (oldComponents['minecraft:max_stack_size']) {
+      newItem['minecraft:item'].components!['minecraft:max_stack_size'] =
+        oldComponents['minecraft:max_stack_size'];
+    }
+  }
+
+  return newItem;
 }
 
 const migratedItem = migrateItemTo1_21_60(oldItem);
+console.log('迁移后的物品:', migratedItem['minecraft:item'].description.identifier);
 
 // ==============================================
 // 示例 4: 使用 Blocks 类型
 // ==============================================
 
-import { BlocksDefinition } from '../types/behavior/blocks/v1_21_60';
+import type { BlockBehavior } from '../types/behavior/blocks/v1_21_60';
 
-const customBlock: BlocksDefinition = {
+const customBlock: BlockBehavior = {
   format_version: '1.21.60',
   'minecraft:block': {
     description: {
@@ -90,9 +107,7 @@ const customBlock: BlocksDefinition = {
     },
     components: {
       'minecraft:loot': 'loot_tables/blocks/custom_block.json',
-      'minecraft:geometry': {
-        identifier: 'geometry.custom_block'
-      },
+      'minecraft:geometry': 'geometry.custom_block',
       'minecraft:material_instances': {
         '*': {
           texture: 'custom_block',
@@ -103,6 +118,8 @@ const customBlock: BlocksDefinition = {
   }
 };
 
+console.log('自定义方块:', customBlock['minecraft:block'].description.identifier);
+
 // ==============================================
 // 示例 5: 类型安全的配置
 // ==============================================
@@ -111,7 +128,7 @@ const customBlock: BlocksDefinition = {
  * 类型安全的 Item 构建器
  */
 class ItemBuilder {
-  private item: Item_Latest;
+  private readonly item: Item_v1_21_60;
 
   constructor(identifier: string) {
     this.item = {
@@ -126,28 +143,40 @@ class ItemBuilder {
   }
 
   setMaxStackSize(size: number): this {
-    this.item['minecraft:item'].components!['minecraft:max_stack_size'] = size;
+    if (!this.item['minecraft:item'].components) {
+      this.item['minecraft:item'].components = {};
+    }
+    this.item['minecraft:item'].components['minecraft:max_stack_size'] = size;
     return this;
   }
 
   setDamage(damage: number): this {
-    this.item['minecraft:item'].components!['minecraft:damage'] = damage;
+    if (!this.item['minecraft:item'].components) {
+      this.item['minecraft:item'].components = {};
+    }
+    this.item['minecraft:item'].components['minecraft:damage'] = damage;
     return this;
   }
 
   setDurability(maxDurability: number): this {
-    this.item['minecraft:item'].components!['minecraft:durability'] = {
+    if (!this.item['minecraft:item'].components) {
+      this.item['minecraft:item'].components = {};
+    }
+    this.item['minecraft:item'].components['minecraft:durability'] = {
       max_durability: maxDurability
     };
     return this;
   }
 
   setIcon(icon: string): this {
-    this.item['minecraft:item'].components!['minecraft:icon'] = icon;
+    if (!this.item['minecraft:item'].components) {
+      this.item['minecraft:item'].components = {};
+    }
+    this.item['minecraft:item'].components['minecraft:icon'] = icon;
     return this;
   }
 
-  build(): Item_Latest {
+  build(): Item_v1_21_60 {
     return this.item;
   }
 }
@@ -160,6 +189,8 @@ const builtItem = new ItemBuilder('mypack:builder_item')
   .setIcon('builder_item')
   .build();
 
+console.log('构建的物品:', builtItem['minecraft:item'].description.identifier);
+
 // ==============================================
 // 示例 6: 多版本兼容性检查
 // ==============================================
@@ -167,7 +198,7 @@ const builtItem = new ItemBuilder('mypack:builder_item')
 /**
  * 检查 item 是否兼容指定版本
  */
-function isCompatibleWith(item: Item_Latest, targetVersion: string): boolean {
+function isCompatibleWith(item: Item_v1_21_60, targetVersion: string): boolean {
   const itemVersion = item.format_version;
 
   // 简单的版本比较（实际应用中应使用更复杂的版本比较逻辑）
@@ -192,7 +223,7 @@ console.log('Item 兼容 1.22.0?', isCompatibleWith(customSword, '1.22.0')); // 
 /**
  * 将 item 导出为 JSON 字符串
  */
-function exportItemToJSON(item: Item_Latest): string {
+function exportItemToJSON(item: Item_v1_21_60): string {
   return JSON.stringify(item, null, 2);
 }
 
@@ -203,7 +234,7 @@ console.log(itemJSON);
 /**
  * 从 JSON 加载 item（带类型验证）
  */
-function loadItemFromJSON(json: string): Item_Latest {
+function loadItemFromJSON(json: string): Item_v1_21_60 {
   const parsed = JSON.parse(json);
 
   // 运行时验证（可选）
@@ -211,10 +242,11 @@ function loadItemFromJSON(json: string): Item_Latest {
     throw new Error('无效的 item JSON 格式');
   }
 
-  return parsed as Item_Latest;
+  return parsed as Item_v1_21_60;
 }
 
 const loadedItem = loadItemFromJSON(itemJSON);
+console.log('加载的物品:', loadedItem['minecraft:item'].description.identifier);
 
 // ==============================================
 // 示例 8: 类型守卫
@@ -223,22 +255,92 @@ const loadedItem = loadItemFromJSON(itemJSON);
 /**
  * 检查对象是否是有效的 Item
  */
-function isValidItem(obj: any): obj is Item_Latest {
+function isValidItem(obj: unknown): obj is Item_v1_21_60 {
+  if (!obj || typeof obj !== 'object') return false;
+
+  const item = obj as Record<string, unknown>;
+
   return (
-    obj &&
-    typeof obj === 'object' &&
-    typeof obj.format_version === 'string' &&
-    obj['minecraft:item'] &&
-    typeof obj['minecraft:item'] === 'object'
+    typeof item.format_version === 'string' &&
+    item['minecraft:item'] !== undefined &&
+    typeof item['minecraft:item'] === 'object'
   );
 }
 
-const maybeItem: unknown = JSON.parse('{"format_version": "1.21.60", "minecraft:item": {}}');
+const maybeItem: unknown = JSON.parse('{"format_version": "1.21.60", "minecraft:item": {"description": {"identifier": "test:item"}}}');
 
 if (isValidItem(maybeItem)) {
-  // TypeScript 知道这里 maybeItem 是 Item_Latest 类型
+  // TypeScript 知道这里 maybeItem 是 Item_v1_21_60 类型
   console.log('有效的 item:', maybeItem.format_version);
 }
+
+// ==============================================
+// 示例 9: 使用组件类型
+// ==============================================
+
+import type { Food } from '../types/behavior/items/v1_21_60';
+
+const foodComponent: Food = {
+  can_always_eat: false,
+  nutrition: 4,
+  saturation_modifier: 0.6,
+  using_converts_to: 'minecraft:bowl'
+};
+
+const customFood: Item_v1_21_60 = {
+  format_version: '1.21.60',
+  'minecraft:item': {
+    description: {
+      identifier: 'mypack:mushroom_stew'
+    },
+    components: {
+      'minecraft:food': foodComponent,
+      'minecraft:max_stack_size': 1,
+      'minecraft:use_animation': 'eat'
+    }
+  }
+};
+
+console.log('自定义食物:', customFood['minecraft:item'].description.identifier);
+
+// ==============================================
+// 示例 10: 方块组件使用
+// ==============================================
+
+import type { MaterialInstances } from '../types/behavior/blocks/v1_21_60';
+
+const materialInstances: MaterialInstances = {
+  '*': {
+    texture: 'my_texture',
+    render_method: 'alpha_test',
+    face_dimming: true,
+    ambient_occlusion: true
+  },
+  'up': {
+    texture: 'my_texture_top'
+  },
+  'down': {
+    texture: 'my_texture_bottom'
+  }
+};
+
+const blockWithMaterials: BlockBehavior = {
+  format_version: '1.21.60',
+  'minecraft:block': {
+    description: {
+      identifier: 'mypack:fancy_block'
+    },
+    components: {
+      'minecraft:material_instances': materialInstances,
+      'minecraft:destructible_by_mining': {
+        seconds_to_destroy: 2.0
+      },
+      'minecraft:friction': 0.6
+    }
+  }
+};
+
+console.log('带材质的方块:', blockWithMaterials['minecraft:block'].description.identifier);
 
 // ==============================================
 // 总结
@@ -253,3 +355,5 @@ console.log('3. 构建类型安全的工具类');
 console.log('4. 执行版本兼容性检查');
 console.log('5. 进行 JSON 序列化和反序列化');
 console.log('6. 使用类型守卫进行运行时验证');
+console.log('7. 使用独立的组件类型定义');
+console.log('8. 构建复杂的方块和物品定义');

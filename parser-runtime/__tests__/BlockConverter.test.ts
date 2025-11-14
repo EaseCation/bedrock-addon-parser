@@ -506,6 +506,270 @@ describe('BlockConverter', () => {
       expect(block.selectionBox).toBeDefined();
       expect(block.materialInstances).toBeDefined();
     });
+
+    // ===== 新组件测试 =====
+
+    test('should extract loot table as string', () => {
+      const blockData = {
+        'minecraft:block': {
+          description: {
+            identifier: 'mypack:custom_ore'
+          },
+          components: {
+            'minecraft:loot': 'loot_tables/blocks/custom_ore.json'
+          }
+        }
+      };
+
+      const result = BlockConverter.convertToStandard(blockData, createMetadata());
+
+      expect(result[0].lootTable).toBe('loot_tables/blocks/custom_ore.json');
+    });
+
+    test('should normalize flammable when set to true', () => {
+      const blockData = {
+        'minecraft:block': {
+          description: {
+            identifier: 'mypack:wood_planks'
+          },
+          components: {
+            'minecraft:flammable': true
+          }
+        }
+      };
+
+      const result = BlockConverter.convertToStandard(blockData, createMetadata());
+
+      expect(result[0].flammable).toEqual({
+        isFlammable: true,
+        catchChanceModifier: null,
+        destroyChanceModifier: null
+      });
+    });
+
+    test('should normalize flammable when set to false', () => {
+      const blockData = {
+        'minecraft:block': {
+          description: {
+            identifier: 'mypack:stone'
+          },
+          components: {
+            'minecraft:flammable': false
+          }
+        }
+      };
+
+      const result = BlockConverter.convertToStandard(blockData, createMetadata());
+
+      expect(result[0].flammable).toEqual({
+        isFlammable: false,
+        catchChanceModifier: null,
+        destroyChanceModifier: null
+      });
+    });
+
+    test('should normalize flammable with custom parameters', () => {
+      const blockData = {
+        'minecraft:block': {
+          description: {
+            identifier: 'mypack:dry_wood'
+          },
+          components: {
+            'minecraft:flammable': {
+              catch_chance_modifier: 60,
+              destroy_chance_modifier: 80
+            }
+          }
+        }
+      };
+
+      const result = BlockConverter.convertToStandard(blockData, createMetadata());
+
+      expect(result[0].flammable).toEqual({
+        isFlammable: true,
+        catchChanceModifier: 60,
+        destroyChanceModifier: 80
+      });
+    });
+
+    test('should normalize map color from hex string', () => {
+      const blockData = {
+        'minecraft:block': {
+          description: {
+            identifier: 'mypack:grass_block'
+          },
+          components: {
+            'minecraft:map_color': '#7CBD6B'
+          }
+        }
+      };
+
+      const result = BlockConverter.convertToStandard(blockData, createMetadata());
+
+      expect(result[0].mapColor).toEqual({
+        red: 124,
+        green: 189,
+        blue: 107
+      });
+    });
+
+    test('should normalize map color from RGB array', () => {
+      const blockData = {
+        'minecraft:block': {
+          description: {
+            identifier: 'mypack:stone'
+          },
+          components: {
+            'minecraft:map_color': [128, 128, 128]
+          }
+        }
+      };
+
+      const result = BlockConverter.convertToStandard(blockData, createMetadata());
+
+      expect(result[0].mapColor).toEqual({
+        red: 128,
+        green: 128,
+        blue: 128
+      });
+    });
+
+    test('should normalize placement filter with allowed faces', () => {
+      const blockData = {
+        'minecraft:block': {
+          description: {
+            identifier: 'mypack:torch'
+          },
+          components: {
+            'minecraft:placement_filter': {
+              conditions: [
+                {
+                  allowed_faces: ['up', 'side'],
+                  block_filter: ['minecraft:stone', 'minecraft:dirt']
+                }
+              ]
+            }
+          }
+        }
+      };
+
+      const result = BlockConverter.convertToStandard(blockData, createMetadata());
+
+      expect(result[0].placementFilter).toEqual({
+        conditions: [
+          {
+            allowedFaces: ['up', 'side'],
+            blockFilter: ['minecraft:stone', 'minecraft:dirt']
+          }
+        ]
+      });
+    });
+
+    test('should normalize placement filter with block descriptors', () => {
+      const blockData = {
+        'minecraft:block': {
+          description: {
+            identifier: 'mypack:crop'
+          },
+          components: {
+            'minecraft:placement_filter': {
+              conditions: [
+                {
+                  allowed_faces: ['up'],
+                  block_filter: [
+                    'minecraft:farmland',
+                    { name: 'minecraft:dirt' },
+                    { tags: ['dirt'] }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      };
+
+      const result = BlockConverter.convertToStandard(blockData, createMetadata());
+
+      expect(result[0].placementFilter).toEqual({
+        conditions: [
+          {
+            allowedFaces: ['up'],
+            blockFilter: ['minecraft:farmland', 'minecraft:dirt', 'dirt']
+          }
+        ]
+      });
+    });
+
+    test('should normalize breathability as solid', () => {
+      const blockData = {
+        'minecraft:block': {
+          description: {
+            identifier: 'mypack:stone'
+          },
+          components: {
+            'minecraft:breathability': 'solid'
+          }
+        }
+      };
+
+      const result = BlockConverter.convertToStandard(blockData, createMetadata());
+
+      expect(result[0].breathability).toBe('solid');
+    });
+
+    test('should normalize breathability as air', () => {
+      const blockData = {
+        'minecraft:block': {
+          description: {
+            identifier: 'mypack:leaves'
+          },
+          components: {
+            'minecraft:breathability': 'air'
+          }
+        }
+      };
+
+      const result = BlockConverter.convertToStandard(blockData, createMetadata());
+
+      expect(result[0].breathability).toBe('air');
+    });
+
+    test('should handle block with all new components', () => {
+      const blockData = {
+        'minecraft:block': {
+          description: {
+            identifier: 'mypack:full_featured'
+          },
+          components: {
+            'minecraft:loot': 'loot_tables/blocks/custom.json',
+            'minecraft:flammable': {
+              catch_chance_modifier: 50,
+              destroy_chance_modifier: 70
+            },
+            'minecraft:map_color': '#FF5733',
+            'minecraft:placement_filter': {
+              conditions: [
+                {
+                  allowed_faces: ['up'],
+                  block_filter: ['minecraft:grass']
+                }
+              ]
+            },
+            'minecraft:breathability': 'solid'
+          }
+        }
+      };
+
+      const result = BlockConverter.convertToStandard(blockData, createMetadata());
+
+      const block = result[0];
+      expect(block.lootTable).toBe('loot_tables/blocks/custom.json');
+      expect(block.flammable?.isFlammable).toBe(true);
+      expect(block.flammable?.catchChanceModifier).toBe(50);
+      expect(block.mapColor).toEqual({ red: 255, green: 87, blue: 51 });
+      expect(block.placementFilter?.conditions).toHaveLength(1);
+      expect(block.breathability).toBe('solid');
+    });
   });
 
   describe('performance', () => {

@@ -42,6 +42,11 @@ export interface StandardBlock {
   materialInstances?: Record<string, MaterialInstance>;
   collisionBox?: BoundingBox;
   selectionBox?: BoundingBox;
+  lootTable?: string;
+  flammable?: FlammableProperties;
+  mapColor?: MapColor;
+  placementFilter?: PlacementFilter;
+  breathability?: Breathability;
   components?: Record<string, any>;
   metadata: BlockMetadata;
 }
@@ -193,6 +198,67 @@ export interface MaterialInstance {
   /** 渲染方法 */
   renderMethod: 'opaque' | 'double_sided' | 'blend' | 'alpha_test' | 'alpha_test_single_sided' | null;
 }
+
+/**
+ * 可燃性属性 (Flammable Properties)
+ * 定义方块的可燃性和燃烧行为
+ *
+ * 原始 JSON 类型：boolean | object
+ */
+export interface FlammableProperties {
+  /** 是否可燃 */
+  isFlammable: boolean | null;
+  /** 着火概率修正值（0-100） */
+  catchChanceModifier: number | null;
+  /** 燃尽速度修正值（0-100） */
+  destroyChanceModifier: number | null;
+}
+
+/**
+ * 地图颜色 (Map Color)
+ * 定义方块在地图上显示的颜色
+ *
+ * 原始 JSON 类型：string | [number, number, number]
+ */
+export interface MapColor {
+  /** 红色通道值（0-255） */
+  red: number;
+  /** 绿色通道值（0-255） */
+  green: number;
+  /** 蓝色通道值（0-255） */
+  blue: number;
+}
+
+/**
+ * 放置过滤器 (Placement Filter)
+ * 定义方块的放置规则
+ */
+export interface PlacementFilter {
+  /** 放置条件列表 */
+  conditions?: PlacementCondition[];
+}
+
+/**
+ * 放置条件 (Placement Condition)
+ * 定义方块可以放置在哪些面上
+ */
+export interface PlacementCondition {
+  /** 允许放置的方块面方向列表 */
+  allowedFaces?: BlockFace[];
+  /** 允许依附的方块类型列表 */
+  blockFilter?: string[];
+}
+
+/**
+ * 方块面方向 (Block Face)
+ */
+export type BlockFace = 'up' | 'down' | 'north' | 'south' | 'east' | 'west' | 'side' | 'all';
+
+/**
+ * 可呼吸性 (Breathability)
+ * 定义方块是否允许实体在其中呼吸
+ */
+export type Breathability = 'solid' | 'air';
 
 export interface EntityCollisionBox {
   width: number;   // 碰撞箱宽度（X/Z 轴）
