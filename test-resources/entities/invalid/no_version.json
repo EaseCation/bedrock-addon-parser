@@ -1,0 +1,8 @@
+{
+  "minecraft:entity": {
+    "description": {
+      "identifier": "test:no_version_entity"
+    },
+    "components": {}
+  }
+}

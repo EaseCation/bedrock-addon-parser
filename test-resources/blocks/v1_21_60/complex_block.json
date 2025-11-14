@@ -1,0 +1,69 @@
+{
+  "format_version": "1.21.60",
+  "minecraft:block": {
+    "description": {
+      "identifier": "mypack:advanced_lamp",
+      "states": {
+        "mypack:lit": [false, true],
+        "mypack:color": ["red", "green", "blue"]
+      }
+    },
+    "components": {
+      "minecraft:geometry": "geometry.advanced_lamp",
+      "minecraft:material_instances": {
+        "*": {
+          "texture": "lamp_off",
+          "render_method": "opaque"
+        }
+      },
+      "minecraft:collision_box": {
+        "origin": [-4, 0, -4],
+        "size": [8, 16, 8]
+      },
+      "minecraft:selection_box": {
+        "origin": [-4, 0, -4],
+        "size": [8, 16, 8]
+      },
+      "minecraft:light_emission": 0,
+      "minecraft:custom_components": [
+        "mypack:lamp_toggle_handler",
+        "mypack:color_change_handler"
+      ]
+    },
+    "permutations": [
+      {
+        "condition": "q.block_state('mypack:lit') == true && q.block_state('mypack:color') == 'red'",
+        "components": {
+          "minecraft:light_emission": 15,
+          "minecraft:material_instances": {
+            "*": {
+              "texture": "lamp_on_red"
+            }
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('mypack:lit') == true && q.block_state('mypack:color') == 'green'",
+        "components": {
+          "minecraft:light_emission": 12,
+          "minecraft:material_instances": {
+            "*": {
+              "texture": "lamp_on_green"
+            }
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('mypack:lit') == true && q.block_state('mypack:color') == 'blue'",
+        "components": {
+          "minecraft:light_emission": 10,
+          "minecraft:material_instances": {
+            "*": {
+              "texture": "lamp_on_blue"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

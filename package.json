@@ -1,0 +1,38 @@
+{
+  "name": "bedrock-addon-parser",
+  "version": "1.0.0",
+  "description": "Minecraft Bedrock addon parser with automatic version upgrade support",
+  "private": true,
+  "workspaces": [
+    "schema-types",
+    "parser-runtime"
+  ],
+  "scripts": {
+    "setup": "git submodule update --init --recursive && npm install",
+    "generate": "npm run generate:all --workspace=@easecation/schema-types",
+    "build": "npm run build:schema && npm run build:runtime",
+    "build:schema": "npm run generate && cd schema-types && npm run build",
+    "build:runtime": "cd parser-runtime && npm run build",
+    "test": "npm run test:runtime",
+    "test:runtime": "cd parser-runtime && npm test",
+    "clean": "rm -rf node_modules schema-types/node_modules parser-runtime/node_modules schema-types/types schema-types/dist parser-runtime/dist",
+    "clean:all": "npm run clean && rm -rf .gradle java/build java/.gradle"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EaseCation/bedrock-addon-parser.git"
+  },
+  "keywords": [
+    "minecraft",
+    "bedrock",
+    "addon",
+    "parser",
+    "graalvm"
+  ],
+  "author": "EaseCation Team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/EaseCation/bedrock-addon-parser/issues"
+  },
+  "homepage": "https://github.com/EaseCation/bedrock-addon-parser#readme"
+}

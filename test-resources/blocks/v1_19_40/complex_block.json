@@ -1,0 +1,38 @@
+{
+  "format_version": "1.19.40",
+  "minecraft:block": {
+    "description": {
+      "identifier": "mypack:glowing_block",
+      "states": {
+        "mypack:powered": [false, true]
+      }
+    },
+    "components": {
+      "minecraft:destroy_time": 2.0,
+      "minecraft:explosion_resistance": 10.0,
+      "minecraft:friction": 0.5,
+      "minecraft:block_light_emission": 0.0,
+      "minecraft:geometry": "geometry.glowing_block",
+      "minecraft:material_instances": {
+        "*": {
+          "texture": "glowing_block_off",
+          "render_method": "opaque"
+        }
+      }
+    },
+    "permutations": [
+      {
+        "condition": "q.block_state('mypack:powered') == true",
+        "components": {
+          "minecraft:block_light_emission": 1.0,
+          "minecraft:material_instances": {
+            "*": {
+              "texture": "glowing_block_on",
+              "render_method": "opaque"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

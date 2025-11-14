@@ -1,0 +1,50 @@
+{
+  "name": "@easecation/parser-runtime",
+  "version": "1.0.0",
+  "private": true,
+  "description": "JavaScript runtime for parsing and upgrading Minecraft Bedrock addon definitions",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc && webpack",
+    "build:tsc": "tsc",
+    "build:webpack": "webpack",
+    "dev": "tsc --watch",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src/**/*.ts",
+    "clean": "rm -rf dist node_modules"
+  },
+  "keywords": [
+    "minecraft",
+    "bedrock",
+    "addon",
+    "parser",
+    "schema"
+  ],
+  "author": "Nukkit Addon Bridge Team",
+  "license": "MIT",
+  "dependencies": {
+    "@easecation/schema-types": "1.0.0",
+    "ajv": "^8.12.0",
+    "ajv-formats": "^2.1.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.50.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.0",
+    "ts-loader": "^9.5.0",
+    "typescript": "^5.6.0",
+    "webpack": "^5.90.0",
+    "webpack-cli": "^5.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+}

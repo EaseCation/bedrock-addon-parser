@@ -1,0 +1,22 @@
+{
+  "format_version": "1.19.50",
+  "minecraft:entity": {
+    "description": {
+      "identifier": "test:property_mob",
+      "is_spawnable": true,
+      "properties": {
+        "test:variant": {
+          "type": "int",
+          "range": [0, 3],
+          "default": 0
+        }
+      }
+    },
+    "components": {
+      "minecraft:health": {
+        "value": 15,
+        "max": 15
+      }
+    }
+  }
+}

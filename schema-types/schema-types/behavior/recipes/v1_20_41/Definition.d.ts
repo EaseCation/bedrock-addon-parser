@@ -1,0 +1,18 @@
+/**
+ * behavior/recipes/1.12.0/types/base types/definition.json 的类型定义
+ *
+ * 此文件由 schema-types-ts 自动生成
+ * 请勿手动修改此文件
+ *
+ * 生成时间: 2025-11-08T05:36:34.835Z
+ */
+
+/**
+ * Recipe definition 1.12.0
+ */
+export interface Definition {
+  /**
+   * UNDOCUMENTED.
+   */
+  identifier?: string;
+}

@@ -1,0 +1,157 @@
+/**
+ * behavior/entities/format/components/area_attack.json 的类型定义
+ *
+ * 此文件由 schema-types-ts 自动生成
+ * 请勿手动修改此文件
+ *
+ * 生成时间: 2025-11-08T05:36:54.278Z
+ */
+
+/**
+ * The type of damage that is applied to entities that enter the damage range.
+ */
+export type Cause =
+  | 'all'
+  | 'anvil'
+  | 'block_explosion'
+  | 'campfire'
+  | 'charging'
+  | 'contact'
+  | 'drowning'
+  | 'entity_attack'
+  | 'entity_explosion'
+  | 'fall'
+  | 'falling_block'
+  | 'fire'
+  | 'fire_tick'
+  | 'fireworks'
+  | 'fly_into_wall'
+  | 'freezing'
+  | 'lava'
+  | 'lightning'
+  | 'magic'
+  | 'magma'
+  | 'none'
+  | 'override'
+  | 'piston'
+  | 'projectile'
+  | 'ram_attack'
+  | 'self_destruct'
+  | 'sonic_boom'
+  | 'soul_campfire'
+  | 'stalactite'
+  | 'stalagmite'
+  | 'starve'
+  | 'suffocation'
+  | 'temperature'
+  | 'thorns'
+  | 'void'
+  | 'wither';
+/**
+ * The set of entities that are valid to apply the damage to when within range.
+ */
+export type EntityFilter =
+  | (
+      | {
+          all_of?: AllOf;
+          any_of?: AnyOf;
+          none_of?: NoneOf;
+          [k: string]: unknown;
+        }
+      | {
+          [k: string]: unknown;
+        }
+    )[]
+  | FiltersSpec1;
+/**
+ * All tests in an `all_of` group must pass in order for the group to pass.
+ */
+export type AllOf =
+  | (
+      | {
+          all_of?: AllOf;
+          any_of?: AnyOf;
+          none_of?: NoneOf;
+          [k: string]: unknown;
+        }
+      | {
+          [k: string]: unknown;
+        }
+    )[]
+  | FiltersSpec;
+export type FiltersSpec =
+  | {
+      all_of?: AllOf;
+      any_of?: AnyOf;
+      none_of?: NoneOf;
+      [k: string]: unknown;
+    }
+  | {
+      [k: string]: unknown;
+    };
+/**
+ * One or more tests in an `any_of` group must pass in order for the group to pass.
+ */
+export type AnyOf =
+  | (
+      | {
+          all_of?: AllOf;
+          any_of?: AnyOf;
+          none_of?: NoneOf;
+          [k: string]: unknown;
+        }
+      | {
+          [k: string]: unknown;
+        }
+    )[]
+  | FiltersSpec;
+/**
+ * All tests in a `none_of` group must fail in order for the group to pass.
+ */
+export type NoneOf =
+  | (
+      | {
+          all_of?: AllOf;
+          any_of?: AnyOf;
+          none_of?: NoneOf;
+          [k: string]: unknown;
+        }
+      | {
+          [k: string]: unknown;
+        }
+    )[]
+  | FiltersSpec;
+export type FiltersSpec1 =
+  | {
+      all_of?: AllOf;
+      any_of?: AnyOf;
+      none_of?: NoneOf;
+      [k: string]: unknown;
+    }
+  | {
+      [k: string]: unknown;
+    };
+
+/**
+ * A component that does damage to entities that get within range.
+ */
+export interface AreaAttack {
+  cause?: Cause;
+  /**
+   * Attack cooldown (in seconds) for how often this entity can attack a target.
+   */
+  damage_cooldown?: number;
+  /**
+   * How much damage per tick is applied to entities that enter the damage range.
+   */
+  damage_per_tick?: number;
+  /**
+   * How close a hostile entity must be to have the damage applied.
+   */
+  damage_range?: number;
+  entity_filter?: EntityFilter;
+  /**
+   * If the entity should play their attack sound when attacking a target.
+   */
+  play_attack_sound?: boolean & number;
+}

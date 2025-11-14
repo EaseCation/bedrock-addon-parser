@@ -1,0 +1,22 @@
+/**
+ * behavior/entities/format/components/follow_range.json 的类型定义
+ *
+ * 此文件由 schema-types-ts 自动生成
+ * 请勿手动修改此文件
+ *
+ * 生成时间: 2025-11-08T05:36:18.767Z
+ */
+
+/**
+ * UNDOCUMENTED.
+ */
+export interface FollowRange {
+  /**
+   * UNDOCUMENTED.
+   */
+  value?: number;
+  /**
+   * UNDOCUMENTED.
+   */
+  max?: number;
+}
