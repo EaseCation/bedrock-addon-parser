@@ -75,13 +75,21 @@ tasks.register<Exec>("generateSchemaTypes") {
     inputs.file("../schema-types/version-mapping.json")
     outputs.dir("../schema-types/types")
 
-    doFirst {
-        val typesDir = file("../schema-types/types")
-        if (typesDir.exists()) {
-            println("✓ Schema types already generated")
-        } else {
-            println("⚙ Generating schema types from JSON schemas...")
+    val typesDir = file("../schema-types/types")
+
+    // 如果types目录存在，跳过生成
+    onlyIf {
+        val shouldGenerate = !typesDir.exists()
+        if (!shouldGenerate) {
+            println("⏩ Skipping schema types generation (types directory already exists)")
+            println("   📁 Location: ${typesDir.absolutePath}")
+            println("   💡 To regenerate, delete the types directory or run: ./gradlew clean")
         }
+        shouldGenerate
+    }
+
+    doFirst {
+        println("⚙ Generating schema types from JSON schemas...")
     }
 }
 

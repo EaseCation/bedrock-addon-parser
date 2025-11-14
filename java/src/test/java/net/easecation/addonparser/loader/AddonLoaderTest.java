@@ -21,19 +21,17 @@ class AddonLoaderTest {
     private JSRuntime createSimpleRuntime() {
         String js = """
                 var AddonBridgeRuntime = {
-                    default: {
-                        parseAddon: function(filesJson) {
-                            var files = JSON.parse(filesJson);
-                            return JSON.stringify({
-                                blocks: [],
-                                items: [],
-                                entities: [],
-                                metadata: {
-                                    totalFiles: files.length,
-                                    warnings: []
-                                }
-                            });
-                        }
+                    parseAddon: function(filesJson) {
+                        var files = JSON.parse(filesJson);
+                        return JSON.stringify({
+                            blocks: [],
+                            items: [],
+                            entities: [],
+                            metadata: {
+                                totalFiles: files.length,
+                                warnings: []
+                            }
+                        });
                     }
                 };
                 """;
@@ -96,20 +94,18 @@ class AddonLoaderTest {
         // 创建验证路径的 JS Runtime
         String js = """
                 var AddonBridgeRuntime = {
-                    default: {
-                        parseAddon: function(filesJson) {
-                            var files = JSON.parse(filesJson);
-                            var hasCorrectPath = files.some(f => f.path === 'blocks/custom.json');
-                            return JSON.stringify({
-                                blocks: [],
-                                items: [],
-                                entities: [],
-                                metadata: {
-                                    totalFiles: files.length,
-                                    warnings: hasCorrectPath ? [] : ['Incorrect path']
-                                }
-                            });
-                        }
+                    parseAddon: function(filesJson) {
+                        var files = JSON.parse(filesJson);
+                        var hasCorrectPath = files.some(f => f.path === 'blocks/custom.json');
+                        return JSON.stringify({
+                            blocks: [],
+                            items: [],
+                            entities: [],
+                            metadata: {
+                                totalFiles: files.length,
+                                warnings: hasCorrectPath ? [] : ['Incorrect path']
+                            }
+                        });
                     }
                 };
                 """;

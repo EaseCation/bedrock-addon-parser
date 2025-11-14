@@ -1,8 +1,10 @@
 package net.easecation.addonparser.runtime;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.PolyglotAccess;
-import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
 
 import java.io.IOException;
@@ -10,6 +12,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 /**
  * JavaScript Runtime 封装类
@@ -38,6 +41,7 @@ public class JSRuntime implements AutoCloseable {
 
     private static final String BUNDLE_RESOURCE_PATH = "/bundle.js";
     private static final String PARSE_ADDON_FUNCTION = "parseAddon";
+    private static final ObjectMapper MAPPER = createObjectMapper();
 
     private final Context context;
     private final Value parseAddonFunction;
@@ -82,32 +86,29 @@ public class JSRuntime implements AutoCloseable {
                     .build();
 
             // 加载并执行 bundle.js
-            Source source = Source.newBuilder("js", bundleContent, "bundle.js")
-                    .mimeType("application/javascript")
-                    .build();
-
-            Value exports = context.eval(source);
+            context.eval("js", bundleContent);
 
             // 获取 parseAddon 函数
-            // 根据 Webpack 配置，函数在 AddonBridgeRuntime.default.parseAddon
-            Value runtime = exports.getMember("AddonBridgeRuntime");
+            // bundle.js 导出为: AddonBridgeRuntime = { parseAddon }
+            Value bindings = context.getBindings("js");
+            Value runtime = bindings.getMember("AddonBridgeRuntime");
+
             if (runtime == null || runtime.isNull()) {
                 throw new RuntimeException("AddonBridgeRuntime not found in bundle.js");
             }
 
-            Value defaultExport = runtime.getMember("default");
-            if (defaultExport == null || defaultExport.isNull()) {
-                throw new RuntimeException("default export not found in AddonBridgeRuntime");
+            if (!runtime.hasMember(PARSE_ADDON_FUNCTION)) {
+                throw new RuntimeException("AddonBridgeRuntime does not have parseAddon function");
             }
 
-            this.parseAddonFunction = defaultExport.getMember(PARSE_ADDON_FUNCTION);
+            this.parseAddonFunction = runtime.getMember(PARSE_ADDON_FUNCTION);
 
-            if (parseAddonFunction == null || !parseAddonFunction.canExecute()) {
-                throw new RuntimeException("parseAddon function not found or not executable");
+            if (!this.parseAddonFunction.canExecute()) {
+                throw new RuntimeException("parseAddon function is not executable");
             }
 
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load bundle.js", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to initialize JSRuntime", e);
         }
     }
 
@@ -133,6 +134,21 @@ public class JSRuntime implements AutoCloseable {
         } catch (Exception e) {
             throw new RuntimeException("Failed to execute parseAddon", e);
         }
+    }
+
+    /**
+     * 调用 JS 解析 Addon（Java 对象版本）
+     *
+     * @param files JSON 文件列表
+     * @return 标准化 JSON 字符串
+     * @throws JsonProcessingException 如果 JSON 序列化失败
+     * @throws RuntimeException 如果解析失败
+     */
+    public String parseAddon(List<JsonFile> files) throws JsonProcessingException {
+        // 将 Java 对象转换为 JSON 字符串
+        String filesJson = MAPPER.writeValueAsString(files);
+        // 调用字符串版本的方法
+        return parseAddon(filesJson);
     }
 
     /**
@@ -183,5 +199,16 @@ public class JSRuntime implements AutoCloseable {
         if (context != null) {
             context.close();
         }
+    }
+
+    /**
+     * 创建 ObjectMapper 实例
+     *
+     * @return 配置好的 ObjectMapper
+     */
+    private static ObjectMapper createObjectMapper() {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        return mapper;
     }
 }

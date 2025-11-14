@@ -7,9 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -42,7 +40,7 @@ class JSRuntimeTest {
     @Test
     void testParseEmptyFiles() throws Exception {
         // 准备空文件列表
-        List<Map<String, String>> files = new ArrayList<>();
+        List<JsonFile> files = new ArrayList<>();
 
         // 调用 parseAddon
         String result = runtime.parseAddon(files);
@@ -86,11 +84,8 @@ class JSRuntimeTest {
             }
             """;
 
-        List<Map<String, String>> files = new ArrayList<>();
-        Map<String, String> file = new HashMap<>();
-        file.put("path", "blocks/simple_block.json");
-        file.put("content", blockJson);
-        files.add(file);
+        List<JsonFile> files = new ArrayList<>();
+        files.add(new JsonFile("blocks/simple_block.json", blockJson));
 
         // 调用 parseAddon
         String result = runtime.parseAddon(files);
@@ -152,17 +147,9 @@ class JSRuntimeTest {
             }
             """;
 
-        List<Map<String, String>> files = new ArrayList<>();
-
-        Map<String, String> file1 = new HashMap<>();
-        file1.put("path", "blocks/block1.json");
-        file1.put("content", block1Json);
-        files.add(file1);
-
-        Map<String, String> file2 = new HashMap<>();
-        file2.put("path", "blocks/block2.json");
-        file2.put("content", block2Json);
-        files.add(file2);
+        List<JsonFile> files = new ArrayList<>();
+        files.add(new JsonFile("blocks/block1.json", block1Json));
+        files.add(new JsonFile("blocks/block2.json", block2Json));
 
         // 调用 parseAddon
         String result = runtime.parseAddon(files);
@@ -184,11 +171,8 @@ class JSRuntimeTest {
     @Test
     void testParseInvalidJson() throws Exception {
         // 准备无效的 JSON
-        List<Map<String, String>> files = new ArrayList<>();
-        Map<String, String> file = new HashMap<>();
-        file.put("path", "blocks/invalid.json");
-        file.put("content", "invalid json");
-        files.add(file);
+        List<JsonFile> files = new ArrayList<>();
+        files.add(new JsonFile("blocks/invalid.json", "invalid json"));
 
         // 调用 parseAddon
         String result = runtime.parseAddon(files);
@@ -221,11 +205,8 @@ class JSRuntimeTest {
             }
             """;
 
-        List<Map<String, String>> files = new ArrayList<>();
-        Map<String, String> file = new HashMap<>();
-        file.put("path", "blocks/glowing_block.json");
-        file.put("content", blockJson);
-        files.add(file);
+        List<JsonFile> files = new ArrayList<>();
+        files.add(new JsonFile("blocks/glowing_block.json", blockJson));
 
         // 调用 parseAddon
         String result = runtime.parseAddon(files);
@@ -241,8 +222,8 @@ class JSRuntimeTest {
 
     @Test
     void testPerformance() throws Exception {
-        // 性能测试：解析 10 个 Block 应该在 100ms 内完成
-        List<Map<String, String>> files = new ArrayList<>();
+        // 性能测试：解析 10 个 Block 应该在 1 秒内完成
+        List<JsonFile> files = new ArrayList<>();
         String blockTemplate = """
             {
               "format_version": "1.19.40",
@@ -258,10 +239,7 @@ class JSRuntimeTest {
             """;
 
         for (int i = 0; i < 10; i++) {
-            Map<String, String> file = new HashMap<>();
-            file.put("path", "blocks/block_" + i + ".json");
-            file.put("content", String.format(blockTemplate, i));
-            files.add(file);
+            files.add(new JsonFile("blocks/block_" + i + ".json", String.format(blockTemplate, i)));
         }
 
         long start = System.currentTimeMillis();

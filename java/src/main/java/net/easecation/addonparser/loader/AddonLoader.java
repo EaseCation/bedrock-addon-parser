@@ -44,11 +44,8 @@ public class AddonLoader {
         // 扫描所有 JSON 文件
         List<JsonFile> files = scanFiles(addonPath);
 
-        // 序列化为 JSON
-        String filesJson = objectMapper.writeValueAsString(files);
-
-        // 调用 JS 引擎解析
-        String resultJson = jsRuntime.parseAddon(filesJson);
+        // 调用 JS 引擎解析（直接传递 List<JsonFile>）
+        String resultJson = jsRuntime.parseAddon(files);
 
         // 反序列化为 Java DTO
         return objectMapper.readValue(resultJson, ParsedAddon.class);

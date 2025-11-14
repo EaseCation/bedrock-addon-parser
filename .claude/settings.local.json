@@ -8,7 +8,12 @@
       "Bash(npm run generate:all:*)",
       "Bash(./gradlew jar:*)",
       "Bash(git submodule add:*)",
-      "Bash(./gradlew test:*)"
+      "Bash(./gradlew test:*)",
+      "WebSearch",
+      "Bash(cat:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:gist.github.com)",
+      "WebFetch(domain:wiki.bedrock.dev)"
     ],
     "deny": [],
     "ask": []
