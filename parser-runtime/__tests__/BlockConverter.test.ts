@@ -2,8 +2,8 @@
  * BlockConverter 单元测试
  */
 
-import { BlockConverter } from '../../src/typescript/converter/BlockConverter';
-import type { StandardBlock } from '../../src/typescript/index';
+import { BlockConverter } from '../src/typescript/converter/BlockConverter';
+import type { StandardBlock } from '../src/typescript/index';
 
 describe('BlockConverter', () => {
   /**

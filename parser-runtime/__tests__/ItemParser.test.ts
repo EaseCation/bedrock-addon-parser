@@ -2,7 +2,7 @@
  * ItemParser 单元测试
  */
 
-import { ItemParser } from '../../src/typescript/parser/ItemParser';
+import { ItemParser } from '../src/typescript/parser/ItemParser';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -19,7 +19,7 @@ describe('ItemParser', () => {
   function loadTestFile(version: string, filename: string): string {
     const filePath = path.join(
       __dirname,
-      '../../resources/items',
+      '../resources/items',
       version,
       filename
     );

@@ -2,8 +2,8 @@
  * ItemConverter 单元测试
  */
 
-import { ItemConverter } from '../../src/typescript/converter/ItemConverter';
-import type { StandardItem } from '../../src/typescript/index';
+import { ItemConverter } from '../src/typescript/converter/ItemConverter';
+import type { StandardItem } from '../src/typescript/index';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -26,7 +26,7 @@ describe('ItemConverter', () => {
   function loadTestFile(version: string, filename: string): any {
     const filePath = path.join(
       __dirname,
-      '../../resources/items',
+      '../resources/items',
       version,
       filename
     );

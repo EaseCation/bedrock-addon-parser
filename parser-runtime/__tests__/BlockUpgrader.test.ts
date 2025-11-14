@@ -2,7 +2,7 @@
  * BlockUpgrader 单元测试
  */
 
-import { BlockUpgrader } from '../../src/typescript/upgrader/BlockUpgrader';
+import { BlockUpgrader } from '../src/typescript/upgrader/BlockUpgrader';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -13,7 +13,7 @@ describe('BlockUpgrader', () => {
   function loadTestFile(version: string, filename: string): string {
     const filePath = path.join(
       __dirname,
-      '../../resources/blocks',
+      '../resources/blocks',
       version,
       filename
     );

@@ -2,7 +2,7 @@
  * AddonParser 端到端测试
  */
 
-import { parseAddon, JsonFile } from '../../src/typescript/index';
+import { parseAddon, JsonFile } from '../src/typescript/index';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -13,7 +13,7 @@ describe('AddonParser', () => {
   function loadTestFile(type: string, version: string, filename: string): string {
     const filePath = path.join(
       __dirname,
-      `../../resources/${type}`,
+      `../resources/${type}`,
       version,
       filename
     );

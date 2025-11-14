@@ -14,7 +14,8 @@
       "WebFetch(domain:github.com)",
       "WebFetch(domain:gist.github.com)",
       "WebFetch(domain:wiki.bedrock.dev)",
-      "Bash(./gradlew:*)"
+      "Bash(./gradlew:*)",
+      "Bash(tree:*)"
     ],
     "deny": [],
     "ask": []

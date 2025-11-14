@@ -2,7 +2,7 @@
  * EntityParser 单元测试
  */
 
-import { EntityParser } from '../../src/typescript/parser/EntityParser';
+import { EntityParser } from '../src/typescript/parser/EntityParser';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -17,7 +17,7 @@ describe('EntityParser', () => {
    * 辅助函数：读取测试文件
    */
   function loadTestFile(relativePath: string): string {
-    const filePath = path.join(__dirname, '../../..', relativePath);
+    const filePath = path.join(__dirname, '../..', relativePath);
     return fs.readFileSync(filePath, 'utf-8');
   }
 
@@ -27,7 +27,7 @@ describe('EntityParser', () => {
   function loadSchemaTestFile(filename: string): string {
     const filePath = path.join(
       __dirname,
-      '../../../../../schemas/minecraft-bedrock-json-schemas/test/files/correct/data_bp/entities',
+      '../../../../schemas/minecraft-bedrock-json-schemas/test/files/correct/data_bp/entities',
       filename
     );
     return fs.readFileSync(filePath, 'utf-8');

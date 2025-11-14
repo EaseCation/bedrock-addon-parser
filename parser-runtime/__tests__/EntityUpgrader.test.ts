@@ -2,7 +2,7 @@
  * EntityUpgrader 单元测试
  */
 
-import { EntityUpgrader } from '../../src/typescript/upgrader/EntityUpgrader';
+import { EntityUpgrader } from '../src/typescript/upgrader/EntityUpgrader';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -13,7 +13,7 @@ describe('EntityUpgrader', () => {
   function loadTestFile(version: string, filename: string): string {
     const filePath = path.join(
       __dirname,
-      '../../resources/entities',
+      '../resources/entities',
       version,
       filename
     );
@@ -26,7 +26,7 @@ describe('EntityUpgrader', () => {
   function loadSchemaTestFile(filename: string): string {
     const filePath = path.join(
       __dirname,
-      '../../../../../schemas/minecraft-bedrock-json-schemas/test/files/correct/data_bp/entities',
+      '../../../../schemas/minecraft-bedrock-json-schemas/test/files/correct/data_bp/entities',
       filename
     );
     return fs.readFileSync(filePath, 'utf-8');

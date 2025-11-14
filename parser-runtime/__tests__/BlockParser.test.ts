@@ -2,7 +2,7 @@
  * BlockParser 单元测试
  */
 
-import { BlockParser } from '../../src/typescript/parser/BlockParser';
+import { BlockParser } from '../src/typescript/parser/BlockParser';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -19,7 +19,7 @@ describe('BlockParser', () => {
   function loadTestFile(version: string, filename: string): string {
     const filePath = path.join(
       __dirname,
-      '../../resources/blocks',
+      '../resources/blocks',
       version,
       filename
     );

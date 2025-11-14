@@ -2,8 +2,8 @@
  * EntityConverter 单元测试
  */
 
-import { EntityConverter } from '../../src/typescript/converter/EntityConverter';
-import type { StandardEntity } from '../../src/typescript/index';
+import { EntityConverter } from '../src/typescript/converter/EntityConverter';
+import type { StandardEntity } from '../src/typescript/index';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -24,7 +24,7 @@ describe('EntityConverter', () => {
    * 辅助函数：加载测试资源文件
    */
   function loadTestResource(filename: string): any {
-    const filePath = path.join(__dirname, '../../resources/entities/v1_21_60', filename);
+    const filePath = path.join(__dirname, '../resources/entities/v1_21_60', filename);
     const content = fs.readFileSync(filePath, 'utf-8');
     return JSON.parse(content);
   }

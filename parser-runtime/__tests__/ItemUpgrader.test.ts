@@ -2,7 +2,7 @@
  * ItemUpgrader 单元测试
  */
 
-import { ItemUpgrader } from '../../src/typescript/upgrader/ItemUpgrader';
+import { ItemUpgrader } from '../src/typescript/upgrader/ItemUpgrader';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -13,7 +13,7 @@ describe('ItemUpgrader', () => {
   function loadTestFile(version: string, filename: string): any {
     const filePath = path.join(
       __dirname,
-      '../../resources/items',
+      '../resources/items',
       version,
       filename
     );
