@@ -72,6 +72,7 @@ export interface StandardItem {
 
   // 工具属性
   isDigger?: boolean;
+  digger?: Digger;
   isEnchantable?: boolean;
   enchantableSlot?: string;
   enchantableValue?: number;
@@ -81,6 +82,7 @@ export interface StandardItem {
   hasGlint?: boolean;
   rarity?: string;
   useAnimation?: string;
+  dyeable?: Dyeable;
 
   // 功能标志
   isFood?: boolean;
@@ -88,17 +90,20 @@ export interface StandardItem {
   fuelDuration?: number;
   isProjectile?: boolean;
   isThrowable?: boolean;
+  throwable?: Throwable;
   allowOffHand?: boolean;
   handEquipped?: boolean;
   canPlaceBlock?: boolean;
   canPlaceEntity?: boolean;
   isRepairable?: boolean;
+  repairable?: Repairable;
   isCompostable?: boolean;
   compostChance?: number;
 
   // 高级属性
   cooldownDuration?: number;
   cooldownCategory?: string;
+  shooter?: Shooter;
 
   // 保留字段
   components?: Record<string, any>;
@@ -227,6 +232,127 @@ export interface MapColor {
   green: number;
   /** 蓝色通道值（0-255） */
   blue: number;
+}
+
+/**
+ * 挖掘工具配置 (Digger Config)
+ * 定义物品的挖掘行为
+ *
+ * 对应原始 JSON 中的 minecraft:digger 组件
+ */
+export interface Digger {
+  /** 是否使用效率附魔加成 */
+  useEfficiency: boolean;
+  /** 挖掘速度配置列表 */
+  destroySpeeds: DestroySpeed[];
+}
+
+/**
+ * 挖掘速度配置 (Destroy Speed)
+ * 定义对特定方块或方块标签的挖掘速度倍率
+ *
+ * 原始 JSON 类型：block 字段可能是 string | {tags: string}（多态类型）
+ * 标准化后拆分为 block 和 blockTags 两个字段，其中一个为 null
+ */
+export interface DestroySpeed {
+  /** 目标方块标识符（如 "minecraft:stone"），与 blockTags 互斥 */
+  block: string | null;
+  /** 目标方块标签（如 "stone"），与 block 互斥 */
+  blockTags: string | null;
+  /** 挖掘速度倍率（如 8.0 表示 8 倍速度） */
+  speed: number;
+}
+
+/**
+ * 可染色配置 (Dyeable Config)
+ * 定义物品的可染色属性
+ *
+ * 对应原始 JSON 中的 minecraft:dyeable 组件
+ * 通常用于皮革盔甲等物品
+ */
+export interface Dyeable {
+  /** 默认染色颜色，null 表示无默认颜色或使用原始纹理颜色 */
+  defaultColor: MapColor | null;
+}
+
+/**
+ * 修复配置 (Repairable Config)
+ * 定义物品的修复配方
+ *
+ * 对应原始 JSON 中的 minecraft:repairable 组件
+ * 通常用于工具和盔甲等耐久类物品
+ */
+export interface Repairable {
+  /** 修复配方列表 */
+  repairItems: RepairItem[];
+}
+
+/**
+ * 修复配方项 (Repair Item)
+ * 定义可用于修复的物品及修复数值
+ *
+ * 原始 JSON 中 repair_amount 字段可能是 number 或 string
+ */
+export interface RepairItem {
+  /** 可用于修复的物品标识符列表 */
+  items: string[];
+  /** 修复数值，null 表示使用默认修复值 */
+  repairAmount: number | null;
+}
+
+/**
+ * 投掷物配置 (Throwable Config)
+ * 定义物品的投掷行为
+ *
+ * 对应原始 JSON 中的 minecraft:throwable 组件
+ * 通常用于雪球、末影珍珠、药水等投掷类物品
+ */
+export interface Throwable {
+  /** 是否播放挥臂动画 */
+  doSwingAnimation: boolean;
+  /** 发射力量比例 */
+  launchPowerScale: number;
+  /** 最大蓄力时间（秒） */
+  maxDrawDuration: number | null;
+  /** 最小蓄力时间（秒） */
+  minDrawDuration: number | null;
+  /** 最大发射力量 */
+  maxLaunchPower: number | null;
+  /** 是否根据蓄力时间缩放力量 */
+  scalePowerByDrawDuration: boolean;
+}
+
+/**
+ * 射击武器配置 (Shooter Config)
+ * 定义远程武器的射击行为和弹药配置
+ *
+ * 对应原始 JSON 中的 minecraft:shooter 组件
+ * 通常用于弓、弩等远程武器
+ */
+export interface Shooter {
+  /** 弹药配置列表 */
+  ammunition: Ammunition[];
+  /** 是否在拉弓时充能 */
+  chargeOnDraw: boolean;
+  /** 最大拉弓时间（秒） */
+  maxDrawDuration: number | null;
+  /** 是否根据拉弓时间缩放力量 */
+  scalePowerByDrawDuration: boolean;
+}
+
+/**
+ * 弹药配置 (Ammunition)
+ * 定义射击武器可用的弹药类型和获取规则
+ */
+export interface Ammunition {
+  /** 弹药物品标识符 */
+  item: string;
+  /** 是否使用副手弹药 */
+  useOffhand: boolean;
+  /** 是否搜索背包弹药 */
+  searchInventory: boolean;
+  /** 是否在创造模式中消耗弹药 */
+  useInCreative: boolean;
 }
 
 /**

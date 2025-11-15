@@ -80,6 +80,13 @@ public record StandardItem(
         @JsonProperty("isDigger") @Nullable Boolean isDigger,
 
         /**
+         * 挖掘工具配置
+         * 来源：minecraft:digger 组件（v1.20.81+）
+         * 包含挖掘效率和对特定方块的挖掘速度配置
+         */
+        @JsonProperty("digger") @Nullable Digger digger,
+
+        /**
          * 是否可附魔
          * 来源：minecraft:enchantable 组件存在性（v1.20.81+）
          */
@@ -126,6 +133,13 @@ public record StandardItem(
          */
         @JsonProperty("useAnimation") @Nullable String useAnimation,
 
+        /**
+         * 可染色配置
+         * 来源：minecraft:dyeable 组件（v1.20.81+）
+         * 定义物品的默认染色颜色，通常用于皮革盔甲
+         */
+        @JsonProperty("dyeable") @Nullable Dyeable dyeable,
+
         // ========== 功能标志 ==========
         /**
          * 是否食物
@@ -158,6 +172,13 @@ public record StandardItem(
         @JsonProperty("isThrowable") @Nullable Boolean isThrowable,
 
         /**
+         * 投掷物配置
+         * 来源：minecraft:throwable 组件（v1.20.81+）
+         * 包含投掷行为的详细参数（蓄力、力量、动画等）
+         */
+        @JsonProperty("throwable") @Nullable Throwable throwable,
+
+        /**
          * 是否允许副手持握
          * 来源：minecraft:allow_off_hand（v1.20.81+）
          */
@@ -188,6 +209,13 @@ public record StandardItem(
         @JsonProperty("isRepairable") @Nullable Boolean isRepairable,
 
         /**
+         * 修复配置
+         * 来源：minecraft:repairable 组件
+         * 定义可用于修复的材料和修复耐久度值
+         */
+        @JsonProperty("repairable") @Nullable Repairable repairable,
+
+        /**
          * 是否可堆肥
          * 来源：minecraft:compostable 组件存在性（v1.21.60+）
          */
@@ -212,6 +240,13 @@ public record StandardItem(
          * 来源：minecraft:cooldown.category
          */
         @JsonProperty("cooldownCategory") @Nullable String cooldownCategory,
+
+        /**
+         * 射击武器配置
+         * 来源：minecraft:shooter 组件
+         * 定义远程武器（弓/弩）的弹药和射击行为
+         */
+        @JsonProperty("shooter") @Nullable Shooter shooter,
 
         // ========== 完整组件（保留原始结构）==========
         /**
