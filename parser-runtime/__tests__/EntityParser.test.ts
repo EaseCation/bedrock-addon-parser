@@ -27,7 +27,7 @@ describe('EntityParser', () => {
   function loadSchemaTestFile(filename: string): string {
     const filePath = path.join(
       __dirname,
-      '../../../../schemas/minecraft-bedrock-json-schemas/test/files/correct/data_bp/entities',
+      '../../schemas/minecraft-bedrock-json-schemas/test/files/correct/data_bp/entities',
       filename
     );
     return fs.readFileSync(filePath, 'utf-8');
@@ -52,28 +52,28 @@ describe('EntityParser', () => {
 
   describe('parseEntity', () => {
     test('should parse dragon entity from schema test', () => {
-      const json = loadSchemaTestFile('dragon.entity.bp.json');
-      const result = parser.parseEntity(json, 'entities/dragon.entity.bp.json');
+      const json = loadSchemaTestFile('dragon.entity.json');
+      const result = parser.parseEntity(json, 'entities/dragon.entity.json');
 
       expect(result.version).toBe('1.16.0');
       expect(result.identifier).toBe('blockception:dragon');
-      expect(result.filePath).toBe('entities/dragon.entity.bp.json');
+      expect(result.filePath).toBe('entities/dragon.entity.json');
       expect(result.data['minecraft:entity']).toBeDefined();
     });
 
     test('should parse sheep entity from schema test', () => {
-      const json = loadSchemaTestFile('sheep.entity.bp.json');
-      const result = parser.parseEntity(json, 'entities/sheep.entity.bp.json');
+      const json = loadSchemaTestFile('sheep.entity.json');
+      const result = parser.parseEntity(json, 'entities/sheep.entity.json');
 
       expect(result.version).toBe('1.16.0');
       expect(result.identifier).toBe('blockception:sheep');
-      expect(result.filePath).toBe('entities/sheep.entity.bp.json');
+      expect(result.filePath).toBe('entities/sheep.entity.json');
       expect(result.data['minecraft:entity']).toBeDefined();
     });
 
     test('should parse entity with components', () => {
-      const json = loadSchemaTestFile('dragon.entity.bp.json');
-      const result = parser.parseEntity(json, 'entities/dragon.entity.bp.json');
+      const json = loadSchemaTestFile('dragon.entity.json');
+      const result = parser.parseEntity(json, 'entities/dragon.entity.json');
 
       const entity = result.data['minecraft:entity'];
       expect(entity.components).toBeDefined();
@@ -82,8 +82,8 @@ describe('EntityParser', () => {
     });
 
     test('should parse entity with component_groups and events', () => {
-      const json = loadSchemaTestFile('sheep.entity.bp.json');
-      const result = parser.parseEntity(json, 'entities/sheep.entity.bp.json');
+      const json = loadSchemaTestFile('sheep.entity.json');
+      const result = parser.parseEntity(json, 'entities/sheep.entity.json');
 
       const entity = result.data['minecraft:entity'];
       expect(entity.component_groups).toBeDefined();
@@ -127,12 +127,12 @@ describe('EntityParser', () => {
     test('should parse multiple entities successfully', () => {
       const files = [
         {
-          path: 'entities/dragon.entity.bp.json',
-          content: loadSchemaTestFile('dragon.entity.bp.json')
+          path: 'entities/dragon.entity.json',
+          content: loadSchemaTestFile('dragon.entity.json')
         },
         {
-          path: 'entities/sheep.entity.bp.json',
-          content: loadSchemaTestFile('sheep.entity.bp.json')
+          path: 'entities/sheep.entity.json',
+          content: loadSchemaTestFile('sheep.entity.json')
         }
       ];
 
@@ -146,16 +146,16 @@ describe('EntityParser', () => {
     test('should skip invalid files and continue parsing', () => {
       const files = [
         {
-          path: 'entities/dragon.entity.bp.json',
-          content: loadSchemaTestFile('dragon.entity.bp.json')
+          path: 'entities/dragon.entity.json',
+          content: loadSchemaTestFile('dragon.entity.json')
         },
         {
           path: 'entities/invalid.json',
           content: 'invalid json'
         },
         {
-          path: 'entities/sheep.entity.bp.json',
-          content: loadSchemaTestFile('sheep.entity.bp.json')
+          path: 'entities/sheep.entity.json',
+          content: loadSchemaTestFile('sheep.entity.json')
         }
       ];
 
@@ -194,17 +194,17 @@ describe('EntityParser', () => {
 
   describe('performance', () => {
     test('should parse single file in less than 10ms', () => {
-      const json = loadSchemaTestFile('dragon.entity.bp.json');
+      const json = loadSchemaTestFile('dragon.entity.json');
 
       const start = Date.now();
-      parser.parseEntity(json, 'entities/dragon.entity.bp.json');
+      parser.parseEntity(json, 'entities/dragon.entity.json');
       const duration = Date.now() - start;
 
       expect(duration).toBeLessThan(10);
     });
 
     test('should parse 10 files in less than 100ms', () => {
-      const json = loadSchemaTestFile('dragon.entity.bp.json');
+      const json = loadSchemaTestFile('dragon.entity.json');
       const files = Array.from({ length: 10 }, (_, i) => ({
         path: `entities/entity_${i}.json`,
         content: json

@@ -17,7 +17,9 @@
       "Bash(./gradlew:*)",
       "Bash(tree:*)",
       "Bash(npm run build:tsc:*)",
-      "Bash(npm run build:runtime:*)"
+      "Bash(npm run build:runtime:*)",
+      "Bash(npm test:*)",
+      "WebFetch(domain:api.github.com)"
     ],
     "deny": [],
     "ask": []

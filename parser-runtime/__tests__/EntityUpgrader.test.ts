@@ -26,7 +26,7 @@ describe('EntityUpgrader', () => {
   function loadSchemaTestFile(filename: string): string {
     const filePath = path.join(
       __dirname,
-      '../../../../schemas/minecraft-bedrock-json-schemas/test/files/correct/data_bp/entities',
+      '../../schemas/minecraft-bedrock-json-schemas/test/files/correct/data_bp/entities',
       filename
     );
     return fs.readFileSync(filePath, 'utf-8');
@@ -409,7 +409,7 @@ describe('EntityUpgrader', () => {
 
   describe('real-world entities', () => {
     test('should upgrade dragon entity from schema tests (v1.19.0+)', () => {
-      const json = loadSchemaTestFile('dragon.entity.bp.json');
+      const json = loadSchemaTestFile('dragon.entity.json');
       const data = JSON.parse(json);
 
       // schema 文件使用 v1.16.0，我们需要手动更新到支持的版本
@@ -426,7 +426,7 @@ describe('EntityUpgrader', () => {
     });
 
     test('should upgrade sheep entity from schema tests (v1.19.0+)', () => {
-      const json = loadSchemaTestFile('sheep.entity.bp.json');
+      const json = loadSchemaTestFile('sheep.entity.json');
       const data = JSON.parse(json);
 
       // schema 文件使用 v1.16.0，我们需要手动更新到支持的版本
@@ -439,7 +439,7 @@ describe('EntityUpgrader', () => {
     });
 
     test('should throw error for unsupported old versions (v1.16.0)', () => {
-      const json = loadSchemaTestFile('dragon.entity.bp.json');
+      const json = loadSchemaTestFile('dragon.entity.json');
       const data = JSON.parse(json);
 
       // schema 文件使用 v1.16.0，应该抛出错误
