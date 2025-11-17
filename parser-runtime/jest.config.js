@@ -1,8 +1,43 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  roots: ['<rootDir>/__tests__'],
-  testMatch: ['**/*.test.ts'],
+
+  // 全局超时配置
+  testTimeout: 30000, // 30秒超时
+
+  // 测试项目分组配置
+  projects: [
+    {
+      displayName: 'unit',
+      preset: 'ts-jest',
+      testEnvironment: 'node',
+      testMatch: [
+        '<rootDir>/__tests__/*Parser.test.ts',
+        '<rootDir>/__tests__/*Upgrader.test.ts',
+        '<rootDir>/__tests__/*Converter.test.ts',
+        '<rootDir>/__tests__/AddonParser.test.ts',
+        '<rootDir>/__tests__/utils/**/*.test.ts'
+      ],
+      collectCoverageFrom: [
+        'src/typescript/**/*.ts',
+        '!src/typescript/**/*.d.ts',
+        '!src/typescript/types/**'
+      ]
+    },
+    {
+      displayName: 'integration',
+      preset: 'ts-jest',
+      testEnvironment: 'node',
+      testMatch: ['<rootDir>/__tests__/integration/**/*.test.ts'],
+      collectCoverageFrom: [
+        'src/typescript/**/*.ts',
+        '!src/typescript/**/*.d.ts',
+        '!src/typescript/types/**'
+      ]
+    }
+  ],
+
+  // 全局覆盖率配置
   collectCoverageFrom: [
     'src/typescript/**/*.ts',
     '!src/typescript/**/*.d.ts',
@@ -18,6 +53,7 @@ module.exports = {
       statements: 70
     }
   },
+
   moduleFileExtensions: ['ts', 'js', 'json'],
   verbose: true
 };

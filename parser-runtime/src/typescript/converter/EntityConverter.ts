@@ -18,7 +18,7 @@ export class EntityConverter extends StandardConverter {
    * @param metadata - 元数据（版本、升级路径、警告、文件路径）
    * @returns 标准化的 Entity 对象数组
    */
-  public static convertToStandard(
+  public static toStandard(
     entityData: any,
     metadata: {
       sourceVersion: string;

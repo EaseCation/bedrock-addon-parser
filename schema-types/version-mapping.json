@@ -35,14 +35,59 @@
         "notes": "MC 1.20.81 (2024-05-11)"
       },
       {
+        "format_version": "1.21.0",
+        "commit": "10a1d762",
+        "notes": "MC 1.21.0 (2024-06-08)"
+      },
+      {
+        "format_version": "1.21.30",
+        "commit": "a3e2eaab",
+        "notes": "MC 1.21.30 (2024-09-21)"
+      },
+      {
+        "format_version": "1.21.40",
+        "commit": "31ad665f",
+        "notes": "MC 1.21.40 (2024-11-09)"
+      },
+      {
         "format_version": "1.21.50",
-        "commit": "ec99529c64db37358d38bbdd748470baf4aefad5",
-        "notes": "MC 1.21.50 (2024-12-05)"
+        "commit": "b4b53a80",
+        "notes": "MC 1.21.50 (2024-12-03)"
       },
       {
         "format_version": "1.21.60",
-        "commit": "2d7ba565356605ee83bd052b068c358cbf0277eb",
-        "notes": "MC 1.21.60 - 当前最新 (2024-12-24)"
+        "commit": "968d0c70",
+        "notes": "MC 1.21.60 (2025-02-13)"
+      },
+      {
+        "format_version": "1.21.70",
+        "commit": "8de19607",
+        "notes": "MC 1.21.70 (2025-03-03)"
+      },
+      {
+        "format_version": "1.21.80",
+        "commit": "9a916b58",
+        "notes": "MC 1.21.80 (2025-04-07)"
+      },
+      {
+        "format_version": "1.21.90",
+        "commit": "b2f33a0c",
+        "notes": "MC 1.21.90 (2025-08-08)"
+      },
+      {
+        "format_version": "1.21.100",
+        "commit": "e9ff52d2",
+        "notes": "MC 1.21.100 (2025-09-08)"
+      },
+      {
+        "format_version": "1.21.110",
+        "commit": "cbd02626",
+        "notes": "MC 1.21.110 (2025-10-14)"
+      },
+      {
+        "format_version": "1.21.120",
+        "commit": "6d9e3847",
+        "notes": "MC 1.21.120 - 当前最新 (2025-10-15)"
       }
     ],
     "blocks": [
@@ -77,14 +122,59 @@
         "notes": "MC 1.20.81 (2024-04-29)"
       },
       {
+        "format_version": "1.21.0",
+        "commit": "10a1d762",
+        "notes": "MC 1.21.0 (2024-06-08)"
+      },
+      {
+        "format_version": "1.21.30",
+        "commit": "a3e2eaab",
+        "notes": "MC 1.21.30 (2024-09-21)"
+      },
+      {
+        "format_version": "1.21.40",
+        "commit": "31ad665f",
+        "notes": "MC 1.21.40 (2024-11-09)"
+      },
+      {
         "format_version": "1.21.50",
-        "commit": "ec99529c64db37358d38bbdd748470baf4aefad5",
-        "notes": "MC 1.21.50 (2024-12-05)"
+        "commit": "b4b53a80",
+        "notes": "MC 1.21.50 (2024-12-03)"
       },
       {
         "format_version": "1.21.60",
-        "commit": "2d7ba565356605ee83bd052b068c358cbf0277eb",
-        "notes": "MC 1.21.60 - 当前最新 (2024-12-24)"
+        "commit": "968d0c70",
+        "notes": "MC 1.21.60 (2025-02-13)"
+      },
+      {
+        "format_version": "1.21.70",
+        "commit": "8de19607",
+        "notes": "MC 1.21.70 (2025-03-03)"
+      },
+      {
+        "format_version": "1.21.80",
+        "commit": "9a916b58",
+        "notes": "MC 1.21.80 (2025-04-07)"
+      },
+      {
+        "format_version": "1.21.90",
+        "commit": "b2f33a0c",
+        "notes": "MC 1.21.90 (2025-08-08)"
+      },
+      {
+        "format_version": "1.21.100",
+        "commit": "e9ff52d2",
+        "notes": "MC 1.21.100 (2025-09-08)"
+      },
+      {
+        "format_version": "1.21.110",
+        "commit": "cbd02626",
+        "notes": "MC 1.21.110 (2025-10-14)"
+      },
+      {
+        "format_version": "1.21.120",
+        "commit": "6d9e3847",
+        "notes": "MC 1.21.120 - 当前最新 (2025-10-15)"
       }
     ],
     "entities": [
@@ -116,9 +206,96 @@
         "format_version": "1.21.60",
         "commit": "2d7ba565356605ee83bd052b068c358cbf0277eb"
       }
+    ],
+    "biomes": [
+      {
+        "format_version": "1.19.0",
+        "commit": "c8128d1e1267d25ddf429ad64a5261b4c77f2087",
+        "notes": "MC 1.19.0 - 最早可追溯版本 (字典结构)"
+      },
+      {
+        "format_version": "1.19.40",
+        "commit": "49019fd6f56312f760b59694e08bd32ddc11f520",
+        "notes": "MC 1.19.40 (字典结构)"
+      },
+      {
+        "format_version": "1.19.50",
+        "commit": "beafe8e1169e50f5ea65f88ba7d13b514e3c3206",
+        "notes": "MC 1.19.50 (字典结构)"
+      },
+      {
+        "format_version": "1.20.10",
+        "commit": "0a5f3296362b9916895877d36c3c0da9bc38d178",
+        "notes": "MC 1.20.10 (字典结构)"
+      },
+      {
+        "format_version": "1.20.41",
+        "commit": "ee2790fd266a16ccb881a515dcf13a8dd80bb804",
+        "notes": "MC 1.20.41 (字典结构)"
+      },
+      {
+        "format_version": "1.20.81",
+        "commit": "ebac7a0ab1091ad0695b0ac9e58fa0592989ca99",
+        "notes": "MC 1.20.81 (字典结构)"
+      },
+      {
+        "format_version": "1.21.0",
+        "commit": "10a1d762",
+        "notes": "MC 1.21.0 (字典结构)"
+      },
+      {
+        "format_version": "1.21.30",
+        "commit": "a3e2eaab",
+        "notes": "MC 1.21.30 (字典结构)"
+      },
+      {
+        "format_version": "1.21.40",
+        "commit": "31ad665f",
+        "notes": "MC 1.21.40 (字典结构)"
+      },
+      {
+        "format_version": "1.21.50",
+        "commit": "b4b53a80",
+        "notes": "MC 1.21.50 (字典结构)"
+      },
+      {
+        "format_version": "1.21.60",
+        "commit": "968d0c70",
+        "notes": "MC 1.21.60 (字典结构，添加 creature_spawn_probability)"
+      },
+      {
+        "format_version": "1.21.70",
+        "commit": "8de19607",
+        "notes": "MC 1.21.70 (字典结构)"
+      },
+      {
+        "format_version": "1.21.80",
+        "commit": "ae9e79c04d188a6a58884582053a388c8a640dad",
+        "notes": "MC 1.21.80 (2025-04-29) - 包装器结构 (minecraft:biome)"
+      },
+      {
+        "format_version": "1.21.90",
+        "commit": "b2f33a0c",
+        "notes": "MC 1.21.90 (2025-08-08) - 包装器结构"
+      },
+      {
+        "format_version": "1.21.100",
+        "commit": "e9ff52d2",
+        "notes": "MC 1.21.100 (2025-09-08) - 包装器结构"
+      },
+      {
+        "format_version": "1.21.110",
+        "commit": "cbd02626",
+        "notes": "MC 1.21.110 (2025-10-14) - 包装器结构"
+      },
+      {
+        "format_version": "1.21.120",
+        "commit": "6d9e3847",
+        "notes": "MC 1.21.120 - 当前最新 (2025-10-15) - 包装器结构"
+      }
     ]
   },
-  "default_commit": "2d7ba565356605ee83bd052b068c358cbf0277eb",
+  "default_commit": "6d9e3847",
   "schema_repository": "https://github.com/Blockception/Minecraft-bedrock-json-schemas.git",
   "schema_directory": "../schemas/minecraft-bedrock-json-schemas"
 }

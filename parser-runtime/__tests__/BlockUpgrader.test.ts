@@ -13,7 +13,7 @@ describe('BlockUpgrader', () => {
   function loadTestFile(version: string, filename: string): string {
     const filePath = path.join(
       __dirname,
-      '../resources/blocks',
+      'resources/blocks',
       version,
       filename
     );
@@ -21,55 +21,73 @@ describe('BlockUpgrader', () => {
   }
 
   describe('upgradeToLatest', () => {
-    test('should throw error for unsupported version', () => {
+    test('should throw error for unsupported version in strict mode', () => {
       const data = { format_version: '1.0.0' };
 
       expect(() => {
-        BlockUpgrader.upgradeToLatest(data, '1.0.0');
+        BlockUpgrader.upgradeToLatest(data, '1.0.0', true);
       }).toThrow('Unsupported version: 1.0.0');
     });
 
     test('should return immediately if already at latest version', () => {
-      const data = JSON.parse(loadTestFile('v1_21_60', 'simple_block.json'));
+      const data = JSON.parse(loadTestFile('v1_21_120', 'simple_block.json'));
 
-      const result = BlockUpgrader.upgradeToLatest(data, '1.21.60');
+      const result = BlockUpgrader.upgradeToLatest(data, '1.21.120');
 
-      expect(result.upgradePath).toEqual(['1.21.60']);
+      expect(result.upgradePath).toEqual(['1.21.120']);
       expect(result.warnings.length).toBe(0);
-      expect(result.data.format_version).toBe('1.21.60');
+      expect(result.data.format_version).toBe('1.21.120');
     });
 
-    test('should upgrade v1.19.40 simple block to v1.21.60', () => {
+    test('should upgrade v1.19.40 simple block to v1.21.120', () => {
       const data = JSON.parse(loadTestFile('v1_19_40', 'simple_block.json'));
 
       const result = BlockUpgrader.upgradeToLatest(data, '1.19.40');
 
-      expect(result.data.format_version).toBe('1.21.60');
+      expect(result.data.format_version).toBe('1.21.120');
       expect(result.upgradePath).toEqual([
         '1.19.40',
         '1.19.50',
         '1.20.10',
         '1.20.41',
         '1.20.81',
+        '1.21.0',
+        '1.21.30',
+        '1.21.40',
         '1.21.50',
-        '1.21.60'
+        '1.21.60',
+        '1.21.70',
+        '1.21.80',
+        '1.21.90',
+        '1.21.100',
+        '1.21.110',
+        '1.21.120'
       ]);
       expect(result.warnings.length).toBeGreaterThan(0);
     });
 
-    test('should upgrade v1.19.50 block to v1.21.60', () => {
+    test('should upgrade v1.19.50 block to v1.21.120', () => {
       const data = JSON.parse(loadTestFile('v1_19_50', 'simple_block.json'));
 
       const result = BlockUpgrader.upgradeToLatest(data, '1.19.50');
 
-      expect(result.data.format_version).toBe('1.21.60');
+      expect(result.data.format_version).toBe('1.21.120');
       expect(result.upgradePath).toEqual([
         '1.19.50',
         '1.20.10',
         '1.20.41',
         '1.20.81',
+        '1.21.0',
+        '1.21.30',
+        '1.21.40',
         '1.21.50',
-        '1.21.60'
+        '1.21.60',
+        '1.21.70',
+        '1.21.80',
+        '1.21.90',
+        '1.21.100',
+        '1.21.110',
+        '1.21.120'
       ]);
     });
   });
@@ -199,7 +217,7 @@ describe('BlockUpgrader', () => {
 
       const result = BlockUpgrader.upgradeToLatest(data, '1.19.40');
 
-      expect(result.data.format_version).toBe('1.21.60');
+      expect(result.data.format_version).toBe('1.21.120');
 
       const components = result.data['minecraft:block'].components;
       // 检查光照转换
@@ -241,7 +259,7 @@ describe('BlockUpgrader', () => {
 
       const result = BlockUpgrader.upgradeToLatest(data, '1.20.81');
 
-      expect(result.data.format_version).toBe('1.21.60');
+      expect(result.data.format_version).toBe('1.21.120');
 
       // 事件组件应该被保留（向下兼容）
       const components = result.data['minecraft:block'].components;
@@ -260,7 +278,7 @@ describe('BlockUpgrader', () => {
 
       const result = BlockUpgrader.upgradeToLatest(data, '1.19.50');
 
-      expect(result.data.format_version).toBe('1.21.60');
+      expect(result.data.format_version).toBe('1.21.120');
 
       // 检查事件组件迁移警告
       const eventWarnings = result.warnings.filter(w =>

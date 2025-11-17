@@ -1,9 +1,0 @@
-{
-  "format_version": "1.21.60",
-  "minecraft:entity": {
-    "description": {
-      "identifier": "test:minimal_mob"
-    },
-    "components": {}
-  }
-}

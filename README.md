@@ -228,6 +228,50 @@ npm test
 npm run clean
 ```
 
+## 测试
+
+项目包含单元测试和集成测试两个层次，使用 Mojang 官方 bedrock-samples 作为集成测试数据。
+
+### 运行测试
+
+```bash
+# 运行所有测试（单元测试 + 集成测试）
+./gradlew test
+npm test
+
+# 仅运行单元测试（快速，手工设计的测试用例）
+npm run test:unit
+
+# 仅运行集成测试（全面，使用官方70个items和122个entities）
+npm run test:integration
+
+# 查看覆盖率
+npm run test:coverage
+```
+
+### 集成测试说明
+
+集成测试使用 Mojang 官方 [bedrock-samples](https://github.com/Mojang/bedrock-samples) 作为测试数据：
+- **Items**: 70个官方物品（apple、golden_apple、wheat_seeds等）
+- **Entities**: 122个官方实体（chicken、zombie、creeper等）
+
+这些测试旨在发现解析器对真实官方JSON文件的兼容性问题，而不是强制100%通过率。常见的失败原因：
+- 官方文件使用了不支持的版本（如1.20.50）
+- 官方文件使用 JSON5 格式（trailing commas）
+- 实验性功能或组件
+
+### 更新测试数据
+
+```bash
+# 初始化测试数据 submodule
+./gradlew initTestData
+
+# 更新到最新版本
+cd parser-runtime/test-data/bedrock-samples
+git fetch --tags
+git checkout v1.21.120.4  # 或最新tag
+```
+
 ## 常见问题
 
 ### types/ 目录不存在

@@ -17,6 +17,7 @@
     "generate:items": "ts-node src/generate-all.ts --module items",
     "generate:blocks": "ts-node src/generate-all.ts --module blocks",
     "generate:entities": "ts-node src/generate-all.ts --module entities",
+    "generate:biomes": "ts-node src/generate-all.ts --module biomes",
     "clean": "rm -rf types && mkdir -p types",
     "build": "tsc",
     "dev": "ts-node --watch src/index.ts"

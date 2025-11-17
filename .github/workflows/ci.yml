@@ -15,7 +15,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
-        submodules: recursive  # 初始化 Git submodules (schemas/)
+        submodules: recursive  # 初始化 Git submodules (schemas/ + parser-runtime/test-data/bedrock-samples/)
         fetch-depth: 0  # 获取完整历史，避免浅克隆导致历史 commit 不可访问
 
     - name: Set up Java 21

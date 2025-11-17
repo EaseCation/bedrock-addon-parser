@@ -46,6 +46,53 @@ tasks.register<Exec>("initSubmodules") {
     }
 }
 
+tasks.register<Exec>("initTestData") {
+    group = "setup"
+    description = "Initialize bedrock-samples submodule for integration testing"
+    commandLine("git", "submodule", "update", "--init", "--recursive",
+                "parser-runtime/test-data/bedrock-samples")
+    workingDir = file(".")
+
+    doFirst {
+        val samplesDir = file("parser-runtime/test-data/bedrock-samples/behavior_pack")
+        if (samplesDir.exists() && samplesDir.listFiles()?.isNotEmpty() == true) {
+            println("✓ Test data already initialized (${samplesDir.absolutePath})")
+        } else {
+            println("⚙ Initializing official Mojang test samples...")
+            println("   📦 Downloading bedrock-samples from https://github.com/Mojang/bedrock-samples")
+        }
+    }
+
+    doLast {
+        val itemsDir = file("parser-runtime/test-data/bedrock-samples/behavior_pack/items")
+        val entitiesDir = file("parser-runtime/test-data/bedrock-samples/behavior_pack/entities")
+        if (itemsDir.exists() && entitiesDir.exists()) {
+            val itemsCount = itemsDir.listFiles()?.size ?: 0
+            val entitiesCount = entitiesDir.listFiles()?.size ?: 0
+            println("✓ Test data initialized successfully")
+            println("   📊 Items: $itemsCount files")
+            println("   📊 Entities: $entitiesCount files")
+        }
+    }
+}
+
+tasks.register("checkTestData") {
+    group = "verification"
+    description = "Check if test data is properly initialized"
+    doLast {
+        val samplesDir = file("parser-runtime/test-data/bedrock-samples/behavior_pack")
+        if (!samplesDir.exists() || samplesDir.listFiles()?.isEmpty() == true) {
+            throw GradleException("""
+                ❌ Test data not initialized!
+
+                Run: ./gradlew initTestData
+                Or:  git submodule update --init --recursive parser-runtime/test-data/bedrock-samples
+            """.trimIndent())
+        }
+        println("✓ Test data is properly initialized")
+    }
+}
+
 // ========== NPM Workspaces 任务（在根目录执行）==========
 
 tasks.register<Exec>("npmInstallRoot") {
@@ -130,7 +177,7 @@ tasks.register<Exec>("npmTest") {
     description = "Run TypeScript tests (parser-runtime)"
     commandLine("npm", "run", "test:runtime")
     workingDir = file(".")
-    dependsOn("npmInstallRoot", "npmBuildSchema")
+    dependsOn("npmInstallRoot", "npmBuildSchema", "initTestData")
 }
 
 tasks.register<Exec>("npmClean") {

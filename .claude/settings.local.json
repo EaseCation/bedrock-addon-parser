@@ -19,7 +19,9 @@
       "Bash(npm run build:tsc:*)",
       "Bash(npm run build:runtime:*)",
       "Bash(npm test:*)",
-      "WebFetch(domain:api.github.com)"
+      "WebFetch(domain:api.github.com)",
+      "Bash(npx tsc:*)",
+      "Bash(echo:*)"
     ],
     "deny": [],
     "ask": []

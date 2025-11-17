@@ -1,3 +1,6 @@
 [submodule "schemas/minecraft-bedrock-json-schemas"]
 	path = schemas/minecraft-bedrock-json-schemas
 	url = https://github.com/Blockception/Minecraft-bedrock-json-schemas.git
+[submodule "parser-runtime/test-data/bedrock-samples"]
+	path = parser-runtime/test-data/bedrock-samples
+	url = https://github.com/Mojang/bedrock-samples.git

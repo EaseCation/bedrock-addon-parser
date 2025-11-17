@@ -13,8 +13,8 @@ describe('ItemConverter', () => {
    */
   function createMetadata() {
     return {
-      sourceVersion: '1.21.60',
-      upgradePath: ['1.19.0', '1.19.40', '1.19.50', '1.20.10', '1.20.41', '1.20.81', '1.21.50', '1.21.60'],
+      sourceVersion: '1.21.120',
+      upgradePath: ['1.19.0', '1.19.40', '1.19.50', '1.20.10', '1.20.41', '1.20.81', '1.21.50', '1.21.120'],
       warnings: [],
       sourceFile: 'items/test_item.json'
     };
@@ -26,7 +26,7 @@ describe('ItemConverter', () => {
   function loadTestFile(version: string, filename: string): any {
     const filePath = path.join(
       __dirname,
-      '../resources/items',
+      'resources/items',
       version,
       filename
     );
@@ -59,7 +59,7 @@ describe('ItemConverter', () => {
       expect(item.identifier).toBe('mypack:simple_item');
       expect(item.maxStackSize).toBe(64);
       expect(item.icon).toBe('simple_item');
-      expect(item.metadata.sourceVersion).toBe('1.21.60');
+      expect(item.metadata.sourceVersion).toBe('1.21.120');
     });
 
     test('should extract display name from minecraft:display_name', () => {
@@ -481,7 +481,7 @@ describe('ItemConverter', () => {
       expect(result[0].useAnimation).toBe('eat');
     });
 
-    test('should extract compostable (v1.21.60+)', () => {
+    test('should extract compostable (v1.21.120+)', () => {
       const itemData = loadTestFile('v1_21_60', 'simple_item.json');
 
       const result = ItemConverter.convertToStandard(itemData, createMetadata());
@@ -521,7 +521,7 @@ describe('ItemConverter', () => {
   describe('Edge cases', () => {
     test('should return empty array when minecraft:item is missing', () => {
       const itemData = {
-        format_version: '1.21.60'
+        format_version: '1.21.120'
       };
 
       const result = ItemConverter.convertToStandard(itemData, createMetadata());
@@ -572,7 +572,7 @@ describe('ItemConverter', () => {
 
       const metadata = {
         sourceVersion: '1.19.0',
-        upgradePath: ['1.19.0', '1.19.40', '1.21.60'],
+        upgradePath: ['1.19.0', '1.19.40', '1.21.120'],
         warnings: ['Test warning 1', 'Test warning 2'],
         sourceFile: 'items/custom_item.json'
       };
@@ -581,7 +581,7 @@ describe('ItemConverter', () => {
 
       const item = result[0];
       expect(item.metadata.sourceVersion).toBe('1.19.0');
-      expect(item.metadata.upgradePath).toEqual(['1.19.0', '1.19.40', '1.21.60']);
+      expect(item.metadata.upgradePath).toEqual(['1.19.0', '1.19.40', '1.21.120']);
       expect(item.metadata.warnings).toEqual(['Test warning 1', 'Test warning 2']);
       expect(item.metadata.sourceFile).toBe('items/custom_item.json');
     });
@@ -718,7 +718,7 @@ describe('ItemConverter', () => {
       expect(item.hasGlint).toBe(true);
     });
 
-    test('should parse v1.21.60 organic food with compostable', () => {
+    test('should parse v1.21.120 organic food with compostable', () => {
       const itemData = loadTestFile('v1_21_60', 'simple_item.json');
 
       const result = ItemConverter.convertToStandard(itemData, createMetadata());

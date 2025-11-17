@@ -3,28 +3,40 @@
  *
  * 负责将旧版本的 Entity JSON 升级到最新版本（1.21.60）
  * 主要处理组件重命名和嵌套结构（components、component_groups、events）
+ *
+ * 注意：Entity 官方只维护两个 Schema 版本（v1.19.0 和 v1.21.60）
  */
 
 import { VersionUpgrader } from './VersionUpgrader';
 import { createLogger } from '../utils/logger';
 import type { UpgradeResult } from './BlockUpgrader';
-import type { EntityBehavior as EntityBehaviorV1_21_50 } from '@easecation/schema-types/types/behavior/entities/v1_21_50/Entities';
+import type { EntityBehavior as EntityBehaviorV1_19_0 } from '@easecation/schema-types/types/behavior/entities/v1_19_0/Entities';
 import type { EntityBehavior as EntityBehaviorV1_21_60 } from '@easecation/schema-types/types/behavior/entities/v1_21_60/Entities';
 
 const logger = createLogger('EntityUpgrader');
 
 export class EntityUpgrader extends VersionUpgrader {
   /**
+   * Entity 模块支持的版本序列
+   * 注意：Entity 官方只维护两个 Schema 版本（v1.19.0 和 v1.21.60）
+   */
+  protected static override readonly VERSION_SEQUENCE = [
+    '1.19.0',
+    '1.21.60'
+  ] as const;
+
+  /**
+   * Entity 模块的最新版本（官方只维护到 v1.21.60）
+   * 注意：Entity 官方 Schema 在 v1.21.60 之后没有更新，与 Block/Item 的 v1.21.120 不同
+   */
+  protected static override readonly LATEST_VERSION = '1.21.60';
+
+  /**
    * 升级器映射表（版本 → 升级函数）
+   * 注意：Entity 只有两个官方 Schema 版本（v1.19.0 和 v1.21.60）
    */
   private static readonly upgraders = new Map<string, (data: any, warnings: string[]) => any>([
-    ['1.19.0', (data, warnings) => EntityUpgrader.upgrade_1_19_0_to_1_19_40(data, warnings)],
-    ['1.19.40', (data, warnings) => EntityUpgrader.upgrade_1_19_40_to_1_19_50(data, warnings)],
-    ['1.19.50', (data, warnings) => EntityUpgrader.upgrade_1_19_50_to_1_20_10(data, warnings)],
-    ['1.20.10', (data, warnings) => EntityUpgrader.upgrade_1_20_10_to_1_20_41(data, warnings)],
-    ['1.20.41', (data, warnings) => EntityUpgrader.upgrade_1_20_41_to_1_20_81(data, warnings)],
-    ['1.20.81', (data, warnings) => EntityUpgrader.upgrade_1_20_81_to_1_21_50(data, warnings)],
-    ['1.21.50', (data, warnings) => EntityUpgrader.upgrade_1_21_50_to_1_21_60(data, warnings)]
+    ['1.19.0', (data, warnings) => EntityUpgrader.upgrade_1_19_0_to_1_21_60(data, warnings)]
   ]);
 
   /**
@@ -34,23 +46,35 @@ export class EntityUpgrader extends VersionUpgrader {
    *
    * @param data - 原始 Entity JSON 对象
    * @param fromVersion - 起始版本
+   * @param strictMode - 严格模式（默认 false）
+   *   - true: 不支持的版本直接抛出异常
+   *   - false: 尝试推断最接近的版本
    * @returns 升级结果
    */
-  public static upgradeToLatest(data: any, fromVersion: string): UpgradeResult<any> {
+  public static upgradeToLatest(
+    data: any,
+    fromVersion: string,
+    strictMode: boolean = false
+  ): UpgradeResult<any> {
     const warnings: string[] = [];
     const upgradePath: string[] = [fromVersion];
 
-    // 1. 验证起始版本
-    if (!this.isSupportedVersion(fromVersion)) {
-      throw new Error(
-        `Unsupported version: ${fromVersion}. ` +
-        `Supported versions: ${this.VERSION_SEQUENCE.join(', ')}`
-      );
+    // 1. 版本推断（如果需要）
+    const { version: effectiveVersion, warnings: inferWarnings } =
+      this.inferVersion(fromVersion, strictMode);
+
+    // 记录推断警告
+    warnings.push(...inferWarnings);
+
+    // 记录推断信息到升级路径
+    if (effectiveVersion !== fromVersion) {
+      upgradePath.push(`(推断为 ${effectiveVersion})`);
+      logger.info(`[Upgrade] Version inferred: ${fromVersion} → ${effectiveVersion}`);
     }
 
     // 2. 如果已经是最新版本，直接返回
-    if (fromVersion === this.LATEST_VERSION) {
-      logger.info(`[Upgrade] Already at latest version: ${fromVersion}`);
+    if (effectiveVersion === this.LATEST_VERSION) {
+      logger.info(`[Upgrade] Already at latest version: ${effectiveVersion}`);
       return {
         data,
         upgradePath,
@@ -59,7 +83,7 @@ export class EntityUpgrader extends VersionUpgrader {
     }
 
     // 3. 找到起始版本的索引
-    const startIndex = this.getVersionIndex(fromVersion);
+    const startIndex = this.getVersionIndex(effectiveVersion);
 
     // 4. 链式升级到最新版本
     let current = JSON.parse(JSON.stringify(data));  // 深拷贝（兼容 GraalVM）
@@ -81,7 +105,7 @@ export class EntityUpgrader extends VersionUpgrader {
       upgradePath.push(nextVersion);
     }
 
-    logger.info(`[Upgrade] Successfully upgraded from ${fromVersion} to ${this.LATEST_VERSION}`);
+    logger.info(`[Upgrade] Successfully upgraded from ${effectiveVersion} to ${this.LATEST_VERSION}`);
     logger.info(`[Upgrade] Path: ${upgradePath.join(' → ')}`);
     logger.info(`[Upgrade] Warnings: ${warnings.length} found`);
 
@@ -93,146 +117,93 @@ export class EntityUpgrader extends VersionUpgrader {
   }
 
   /**
-   * v1.19.0 → v1.19.40 升级器
-   * 主要变更：小幅增强
-   */
-  private static upgrade_1_19_0_to_1_19_40(data: any, warnings: string[]): any {
-    const result = JSON.parse(JSON.stringify(data));  // 深拷贝（兼容 GraalVM）
-    result.format_version = '1.19.40';
-    warnings.push('[Upgrade] v1.19.0 → v1.19.40: Minor enhancements');
-    return result;
-  }
-
-  /**
-   * v1.19.40 → v1.19.50 升级器
-   * 主要变更：小幅增强
-   */
-  private static upgrade_1_19_40_to_1_19_50(data: any, warnings: string[]): any {
-    const result = JSON.parse(JSON.stringify(data));  // 深拷贝（兼容 GraalVM）
-    result.format_version = '1.19.50';
-    warnings.push('[Upgrade] v1.19.40 → v1.19.50: Minor enhancements');
-    return result;
-  }
-
-  /**
-   * v1.19.50 → v1.20.10 升级器
-   * 主要变更：引入属性系统（BoolProperty, EnumProperty, FloatProperty, IntProperty）
-   */
-  private static upgrade_1_19_50_to_1_20_10(data: any, warnings: string[]): any {
-    const result = JSON.parse(JSON.stringify(data));  // 深拷贝（兼容 GraalVM）
-    result.format_version = '1.20.10';
-
-    const entity = result['minecraft:entity'];
-    if (entity && entity.description?.properties) {
-      warnings.push(
-        '[Upgrade] v1.19.50 → v1.20.10: Entity properties system introduced. ' +
-        'Ensure client-side property sync is configured correctly.'
-      );
-    } else {
-      warnings.push('[Upgrade] v1.19.50 → v1.20.10: Property system available (optional)');
-    }
-
-    return result;
-  }
-
-  /**
-   * v1.20.10 → v1.20.41 升级器
-   * 主要变更：小幅增强
-   */
-  private static upgrade_1_20_10_to_1_20_41(data: any, warnings: string[]): any {
-    const result = JSON.parse(JSON.stringify(data));  // 深拷贝（兼容 GraalVM）
-    result.format_version = '1.20.41';
-    warnings.push('[Upgrade] v1.20.10 → v1.20.41: Minor enhancements');
-    return result;
-  }
-
-  /**
-   * v1.20.41 → v1.20.81 升级器
-   * 主要变更：新增大量 AI 组件和过滤器（+15 组件）
-   */
-  private static upgrade_1_20_41_to_1_20_81(data: any, warnings: string[]): any {
-    const result = JSON.parse(JSON.stringify(data));  // 深拷贝（兼容 GraalVM）
-    result.format_version = '1.20.81';
-    warnings.push('[Upgrade] v1.20.41 → v1.20.81: AI behavior enhancements (+15 new components available)');
-    return result;
-  }
-
-  /**
-   * v1.20.81 → v1.21.50 升级器
-   * 主要变更：进一步增强 AI 和交互能力（+12 组件）
-   */
-  private static upgrade_1_20_81_to_1_21_50(data: any, warnings: string[]): any {
-    const result = JSON.parse(JSON.stringify(data));  // 深拷贝（兼容 GraalVM）
-    result.format_version = '1.21.50';
-    warnings.push('[Upgrade] v1.20.81 → v1.21.50: AI and interaction enhancements (+12 new components available)');
-    return result;
-  }
-
-  /**
-   * v1.21.50 → v1.21.60 升级器
-   * 主要变更：组件重命名（lookat → looked_at）、事件系统改进
+   * v1.19.0 → v1.21.60 升级器
    *
-   * 注意：函数签名使用强类型保证输入输出的类型安全
+   * 主要变更：
+   * 1. 引入属性系统（properties: BoolProperty, EnumProperty, FloatProperty, IntProperty）
+   * 2. minecraft:health 支持范围格式（range_min, range_max）
+   * 3. 新增大量 AI 组件和过滤器（~27+ 新组件）
+   * 4. 组件重命名：minecraft:behavior.lookat → minecraft:behavior.looked_at
+   * 5. 事件系统改进（filter expressions）
+   * 6. 改进的 Item Descriptor 支持（tags, molang_tests）
+   *
+   * 注意：由于官方 Schema 只维护两个版本，此升级器处理跨越多个中间版本的兼容性。
+   * 大部分 v1.19.0 的内容在 v1.21.60 中保持向后兼容。
    */
-  private static upgrade_1_21_50_to_1_21_60(
-    data: EntityBehaviorV1_21_50,
+  private static upgrade_1_19_0_to_1_21_60(
+    data: EntityBehaviorV1_19_0,
     warnings: string[]
   ): EntityBehaviorV1_21_60 {
-    // 使用深拷贝避免修改原始数据，内部使用 any 支持动态操作
-    const result = JSON.parse(JSON.stringify(data)) as any;  // 深拷贝（兼容 GraalVM）
+    const oldEntity = data['minecraft:entity'];
 
-    // 更新版本号
-    result.format_version = '1.21.60';
-
-    // 获取 minecraft:entity 定义
-    const entity = result['minecraft:entity'];
-    if (!entity) {
-      warnings.push('[Upgrade] v1.21.50 → v1.21.60: No minecraft:entity found, skipping');
-      return result as EntityBehaviorV1_21_60;
+    if (!oldEntity) {
+      warnings.push('[Upgrade] v1.19.0 → v1.21.60: No minecraft:entity found, skipping');
+      return {
+        format_version: '1.21.60',
+        'minecraft:entity': oldEntity as EntityBehaviorV1_21_60['minecraft:entity']
+      };
     }
 
-    const identifier = entity.description?.identifier || 'unknown';
+    const identifier = oldEntity.description?.identifier || 'unknown';
 
     /**
-     * 辅助函数：升级组件对象
-     * @param components - 组件对象
-     * @param context - 上下文（用于警告信息）
+     * 组件升级辅助函数
+     * 处理：
+     * 1. 组件重命名（lookat → looked_at）
+     * 2. 保留所有其他组件（向后兼容）
      */
-    const upgradeComponents = (components: any, context: string) => {
+    const upgradeComponents = (
+      components: EntityBehaviorV1_19_0['minecraft:entity']['components'] | undefined,
+      context: string
+    ): EntityBehaviorV1_21_60['minecraft:entity']['components'] => {
+      const result: EntityBehaviorV1_21_60['minecraft:entity']['components'] = {};
+
       if (!components || typeof components !== 'object') {
-        return;
+        return result;
       }
 
-      // 处理组件重命名: minecraft:behavior.lookat → minecraft:behavior.looked_at
-      if (components['minecraft:behavior.lookat'] !== undefined) {
-        components['minecraft:behavior.looked_at'] = components['minecraft:behavior.lookat'];
-        delete components['minecraft:behavior.lookat'];
-        warnings.push(`[${identifier}] [${context}] Renamed component: lookat → looked_at`);
-      }
-    };
-
-    // 1. 升级主组件
-    if (entity.components) {
-      upgradeComponents(entity.components, 'components');
-    }
-
-    // 2. 升级组件组中的组件
-    if (entity.component_groups && typeof entity.component_groups === 'object') {
-      for (const groupName of Object.keys(entity.component_groups)) {
-        const groupComponents = entity.component_groups[groupName];
-        if (groupComponents && typeof groupComponents === 'object') {
-          upgradeComponents(groupComponents, `component_groups.${groupName}`);
+      const componentsAny = components as any;
+      for (const key of Object.keys(components)) {
+        if (key === 'minecraft:behavior.lookat') {
+          // 重命名：lookat → looked_at
+          const lookAtComponent = componentsAny[key];
+          if (lookAtComponent !== undefined) {
+            (result as any)['minecraft:behavior.looked_at'] = lookAtComponent;
+            warnings.push(`[${identifier}] [${context}] Renamed component: lookat → looked_at`);
+          }
+        } else {
+          // 保留其他组件（类型断言：无法枚举所有可能的组件）
+          (result as any)[key] = componentsAny[key];
         }
       }
+
+      return result;
+    };
+
+    // 1. 升级主组件（如果存在）
+    const components = oldEntity.components
+      ? upgradeComponents(oldEntity.components, 'components')
+      : undefined;
+
+    // 2. 升级组件组中的组件
+    let componentGroups: EntityBehaviorV1_21_60['minecraft:entity']['component_groups'] | undefined;
+    if (oldEntity.component_groups && typeof oldEntity.component_groups === 'object') {
+      const newComponentGroups: EntityBehaviorV1_21_60['minecraft:entity']['component_groups'] = {};
+      for (const groupName of Object.keys(oldEntity.component_groups)) {
+        const groupComponents = oldEntity.component_groups[groupName];
+        const transformed = upgradeComponents(groupComponents, `component_groups.${groupName}`);
+        // 类型断言：Component 和 Component1 在运行时相同
+        newComponentGroups[groupName] = transformed as any;
+      }
+      componentGroups = newComponentGroups;
     }
 
     // 3. 检查事件中的废弃用法
-    if (entity.events && typeof entity.events === 'object') {
-      for (const eventName of Object.keys(entity.events)) {
-        const eventDef = entity.events[eventName];
+    if (oldEntity.events && typeof oldEntity.events === 'object') {
+      for (const eventName of Object.keys(oldEntity.events)) {
+        const eventDef = oldEntity.events[eventName];
         if (eventDef && typeof eventDef === 'object') {
-          // 检查废弃的 filters 语法
-          if ((eventDef as any).filters !== undefined) {
+          if ('filters' in eventDef) {
             warnings.push(
               `[${identifier}] Event '${eventName}' uses deprecated 'filters' syntax. ` +
               `Consider migrating to filter expressions.`
@@ -242,9 +213,28 @@ export class EntityUpgrader extends VersionUpgrader {
       }
     }
 
-    warnings.push('[Upgrade] v1.21.50 → v1.21.60: Component rename and event system updates applied');
+    // 4. 检查是否使用了新特性
+    if (oldEntity.description?.properties) {
+      warnings.push(
+        `[${identifier}] Entity properties system detected. ` +
+        `Ensure client-side property sync is configured correctly.`
+      );
+    }
 
-    // 返回结果（类型断言为目标版本）
-    return result as EntityBehaviorV1_21_60;
+    warnings.push(
+      '[Upgrade] v1.19.0 → v1.21.60: Major upgrade across multiple versions. ' +
+      'AI components, properties system, and event improvements now available.'
+    );
+
+    // 5. 构造型返回（使用强类型）
+    return {
+      format_version: '1.21.60',
+      'minecraft:entity': {
+        description: oldEntity.description as EntityBehaviorV1_21_60['minecraft:entity']['description'],
+        ...(components && { components }),
+        ...(componentGroups && { component_groups: componentGroups }),
+        ...(oldEntity.events && { events: oldEntity.events as EntityBehaviorV1_21_60['minecraft:entity']['events'] })
+      }
+    };
   }
 }

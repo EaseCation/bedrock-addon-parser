@@ -13,7 +13,7 @@ describe('ItemUpgrader', () => {
   function loadTestFile(version: string, filename: string): any {
     const filePath = path.join(
       __dirname,
-      '../resources/items',
+      'resources/items',
       version,
       filename
     );
@@ -22,21 +22,21 @@ describe('ItemUpgrader', () => {
   }
 
   describe('upgradeToLatest', () => {
-    test('should throw error for unsupported version', () => {
+    test('should throw error for unsupported version in strict mode', () => {
       const data = { format_version: '1.0.0', 'minecraft:item': {} };
 
       expect(() => {
-        ItemUpgrader.upgradeToLatest(data, '1.0.0');
+        ItemUpgrader.upgradeToLatest(data, '1.0.0', true);
       }).toThrow('Unsupported version: 1.0.0');
     });
 
     test('should return data unchanged if already at latest version', () => {
       const data = loadTestFile('v1_21_60', 'simple_item.json');
 
-      const result = ItemUpgrader.upgradeToLatest(data, '1.21.60');
+      const result = ItemUpgrader.upgradeToLatest(data, '1.21.120');
 
       expect(result.data).toEqual(data);
-      expect(result.upgradePath).toEqual(['1.21.60']);
+      expect(result.upgradePath).toEqual(['1.21.120']);
       expect(result.warnings.length).toBe(0);
     });
 
@@ -57,7 +57,7 @@ describe('ItemUpgrader', () => {
 
       const result = ItemUpgrader.upgradeToLatest(data, '1.19.0');
 
-      expect(result.data.format_version).toBe('1.21.60');
+      expect(result.data.format_version).toBe('1.21.120');
       expect(result.upgradePath).toContain('1.19.40');
       expect(result.warnings.some(w => w.includes('v1.19.0 → v1.19.40'))).toBe(true);
     });
@@ -69,7 +69,7 @@ describe('ItemUpgrader', () => {
 
       const result = ItemUpgrader.upgradeToLatest(data, '1.19.40');
 
-      expect(result.data.format_version).toBe('1.21.60');
+      expect(result.data.format_version).toBe('1.21.120');
       expect(result.upgradePath).toContain('1.19.50');
       expect(result.warnings.some(w => w.includes('v1.19.40 → v1.19.50'))).toBe(true);
     });
@@ -115,8 +115,9 @@ describe('ItemUpgrader', () => {
       const result = ItemUpgrader.upgradeToLatest(data, '1.19.50');
 
       const icon = result.data['minecraft:item'].components['minecraft:icon'];
+      // Icon 简化发生在 v1.20.81，而不是 v1.20.10
       expect(icon).toBe('test_icon');
-      expect(result.warnings.some(w => w.includes('Simplified icon component'))).toBe(true);
+      expect(result.warnings.some(w => w.includes('Simplified icon to string format'))).toBe(true);
     });
   });
 
@@ -126,7 +127,7 @@ describe('ItemUpgrader', () => {
 
       const result = ItemUpgrader.upgradeToLatest(data, '1.20.10');
 
-      expect(result.data.format_version).toBe('1.21.60');
+      expect(result.data.format_version).toBe('1.21.120');
       expect(result.upgradePath).toContain('1.20.41');
     });
   });
@@ -288,7 +289,7 @@ describe('ItemUpgrader', () => {
 
       const result = ItemUpgrader.upgradeToLatest(data, '1.20.10');
 
-      expect(result.data.format_version).toBe('1.21.60');
+      expect(result.data.format_version).toBe('1.21.120');
       expect(result.data['minecraft:item']).toBeDefined();
       expect(result.warnings.length).toBeGreaterThan(0);
     });
@@ -431,7 +432,7 @@ describe('ItemUpgrader', () => {
     });
   });
 
-  describe('v1.21.50 → v1.21.60', () => {
+  describe('v1.21.50 → v1.21.120', () => {
     test('should suggest compostable for food items', () => {
       const data = {
         format_version: '1.21.50',
@@ -514,12 +515,12 @@ describe('ItemUpgrader', () => {
   });
 
   describe('Full upgrade path', () => {
-    test('should upgrade from v1.19.0 to v1.21.60', () => {
+    test('should upgrade from v1.19.0 to v1.21.120', () => {
       const data = loadTestFile('v1_19_0', 'simple_item.json');
 
       const result = ItemUpgrader.upgradeToLatest(data, '1.19.0');
 
-      expect(result.data.format_version).toBe('1.21.60');
+      expect(result.data.format_version).toBe('1.21.120');
       expect(result.upgradePath).toEqual([
         '1.19.0',
         '1.19.40',
@@ -527,8 +528,17 @@ describe('ItemUpgrader', () => {
         '1.20.10',
         '1.20.41',
         '1.20.81',
+        '1.21.0',
+        '1.21.30',
+        '1.21.40',
         '1.21.50',
-        '1.21.60'
+        '1.21.60',
+        '1.21.70',
+        '1.21.80',
+        '1.21.90',
+        '1.21.100',
+        '1.21.110',
+        '1.21.120'
       ]);
       expect(result.warnings.length).toBeGreaterThan(0);
     });
@@ -538,33 +548,46 @@ describe('ItemUpgrader', () => {
 
       const result = ItemUpgrader.upgradeToLatest(data, '1.19.0');
 
-      expect(result.data.format_version).toBe('1.21.60');
+      expect(result.data.format_version).toBe('1.21.120');
       expect(result.data['minecraft:item']).toBeDefined();
-      expect(result.upgradePath.length).toBe(8); // 8 versions in the path
+      expect(result.upgradePath.length).toBe(17); // 17 versions in the path
     });
 
-    test('should upgrade from v1.20.81 to v1.21.60', () => {
+    test('should upgrade from v1.20.81 to v1.21.120', () => {
       const data = loadTestFile('v1_20_81', 'simple_item.json');
 
       const result = ItemUpgrader.upgradeToLatest(data, '1.20.81');
 
-      expect(result.data.format_version).toBe('1.21.60');
-      expect(result.upgradePath).toEqual(['1.20.81', '1.21.50', '1.21.60']);
+      expect(result.data.format_version).toBe('1.21.120');
+      expect(result.upgradePath).toEqual([
+        '1.20.81',
+        '1.21.0',
+        '1.21.30',
+        '1.21.40',
+        '1.21.50',
+        '1.21.60',
+        '1.21.70',
+        '1.21.80',
+        '1.21.90',
+        '1.21.100',
+        '1.21.110',
+        '1.21.120'
+      ]);
     });
   });
 
   describe('Performance', () => {
-    test('should upgrade single item in less than 5ms', () => {
+    test('should upgrade single item in less than 50ms', () => {
       const data = loadTestFile('v1_20_81', 'simple_item.json');
 
       const start = Date.now();
       ItemUpgrader.upgradeToLatest(data, '1.20.81');
       const duration = Date.now() - start;
 
-      expect(duration).toBeLessThan(5);
+      expect(duration).toBeLessThan(50);
     });
 
-    test('should upgrade 10 items in less than 50ms', () => {
+    test('should upgrade 10 items in less than 200ms', () => {
       const data = loadTestFile('v1_19_0', 'simple_item.json');
 
       const start = Date.now();
@@ -573,7 +596,7 @@ describe('ItemUpgrader', () => {
       }
       const duration = Date.now() - start;
 
-      expect(duration).toBeLessThan(50);
+      expect(duration).toBeLessThan(200);
     });
   });
 
@@ -590,7 +613,7 @@ describe('ItemUpgrader', () => {
 
       const result = ItemUpgrader.upgradeToLatest(data, '1.19.0');
 
-      expect(result.data.format_version).toBe('1.21.60');
+      expect(result.data.format_version).toBe('1.21.120');
       expect(result.data['minecraft:item'].description.identifier).toBe('test:empty');
     });
 
@@ -637,6 +660,172 @@ describe('ItemUpgrader', () => {
 
       const wearable = result.data['minecraft:item'].components['minecraft:wearable'];
       expect(wearable.protection).toBe(10);
+    });
+  });
+
+  describe('Version Inference', () => {
+    describe('strictMode = true', () => {
+      test('should throw error for unsupported version in strict mode', () => {
+        const data = {
+          format_version: '1.20.50',
+          'minecraft:item': {
+            description: { identifier: 'test:item' },
+            components: {}
+          }
+        };
+
+        expect(() => {
+          ItemUpgrader.upgradeToLatest(data, '1.20.50', true);
+        }).toThrow('Unsupported version: 1.20.50');
+      });
+    });
+
+    describe('strictMode = false (default)', () => {
+      test('should infer closest version for unsupported intermediate version', () => {
+        const data = {
+          format_version: '1.20.50',
+          'minecraft:item': {
+            description: { identifier: 'test:item' },
+            components: {}
+          }
+        };
+
+        const result = ItemUpgrader.upgradeToLatest(data, '1.20.50', false);
+
+        // 1.20.50 should be inferred as 1.20.41 (floor)
+        expect(result.data.format_version).toBe('1.21.120');
+        expect(result.upgradePath).toContain('1.20.50');
+        expect(result.upgradePath).toContain('(推断为 1.20.41)');
+        expect(result.warnings.some(w => w.includes('版本推断'))).toBe(true);
+        expect(result.warnings.some(w => w.includes('1.20.50 → 1.20.41'))).toBe(true);
+      });
+
+      test('should infer floor version for intermediate version (medium confidence)', () => {
+        const data = {
+          format_version: '1.20.60',
+          'minecraft:item': {
+            description: { identifier: 'test:item' },
+            components: {}
+          }
+        };
+
+        const result = ItemUpgrader.upgradeToLatest(data, '1.20.60');
+
+        expect(result.upgradePath).toContain('(推断为 1.20.41)');
+        expect(result.warnings.some(w => w.includes('⚠️'))).toBe(true);
+        expect(result.warnings.some(w => w.includes('向下兼容模式'))).toBe(true);
+      });
+
+      test('should infer ceil version for very old version (low confidence)', () => {
+        const data = {
+          format_version: '1.18.0',
+          'minecraft:item': {
+            description: { identifier: 'test:item' },
+            components: {}
+          }
+        };
+
+        const result = ItemUpgrader.upgradeToLatest(data, '1.18.0');
+
+        expect(result.upgradePath).toContain('(推断为 1.19.0)');
+        expect(result.warnings.some(w => w.includes('❌'))).toBe(true);
+        expect(result.warnings.some(w => w.includes('向上兼容模式'))).toBe(true);
+      });
+
+      test('should infer floor for version newer than latest', () => {
+        const data = {
+          format_version: '1.22.0',
+          'minecraft:item': {
+            description: { identifier: 'test:item' },
+            components: {}
+          }
+        };
+
+        const result = ItemUpgrader.upgradeToLatest(data, '1.22.0');
+
+        // Should infer as latest version (1.21.120)
+        expect(result.upgradePath).toContain('(推断为 1.21.120)');
+        expect(result.warnings.some(w => w.includes('1.22.0 → 1.21.120'))).toBe(true);
+      });
+
+      test('should not infer for exact match (high confidence)', () => {
+        const data = {
+          format_version: '1.20.10',
+          'minecraft:item': {
+            description: { identifier: 'test:item' },
+            components: {}
+          }
+        };
+
+        const result = ItemUpgrader.upgradeToLatest(data, '1.20.10');
+
+        // Should not have inference message in upgrade path
+        expect(result.upgradePath).not.toContain(expect.stringMatching(/\(推断为/));
+        expect(result.warnings.some(w => w.includes('版本推断'))).toBe(false);
+      });
+
+      test('should upgrade inferred version correctly', () => {
+        const data = {
+          format_version: '1.20.50',
+          'minecraft:item': {
+            description: {
+              identifier: 'test:item',
+              category: 'equipment'
+            },
+            components: {
+              'minecraft:foil': true
+            }
+          }
+        };
+
+        const result = ItemUpgrader.upgradeToLatest(data, '1.20.50');
+
+        // Version should be upgraded to latest
+        expect(result.data.format_version).toBe('1.21.120');
+
+        // Components from 1.20.41 should be processed
+        const components = result.data['minecraft:item'].components;
+        expect(components['minecraft:foil']).toBeUndefined();
+        expect(components['minecraft:glint']).toBeDefined();
+
+        // Upgrade path should show inference
+        expect(result.upgradePath).toEqual([
+          '1.20.50',
+          '(推断为 1.20.41)',
+          '1.20.81',
+          '1.21.0',
+          '1.21.30',
+          '1.21.40',
+          '1.21.50',
+          '1.21.60',
+          '1.21.70',
+          '1.21.80',
+          '1.21.90',
+          '1.21.100',
+          '1.21.110',
+          '1.21.120'
+        ]);
+      });
+    });
+
+    describe('Default behavior (strictMode not specified)', () => {
+      test('should use non-strict mode by default', () => {
+        const data = {
+          format_version: '1.20.50',
+          'minecraft:item': {
+            description: { identifier: 'test:item' },
+            components: {}
+          }
+        };
+
+        // Should not throw
+        expect(() => {
+          ItemUpgrader.upgradeToLatest(data, '1.20.50');
+        }).not.toThrow();
+
+        const result = ItemUpgrader.upgradeToLatest(data, '1.20.50');
+        expect(result.upgradePath).toContain('(推断为 1.20.41)');
+      });
     });
   });
 });

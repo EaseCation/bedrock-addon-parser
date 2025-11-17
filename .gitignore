@@ -38,3 +38,7 @@ parser-runtime/dist/
 
 # Java resources (generated)
 java/src/main/resources/bundle.js
+
+# Backup files
+*.bak
+**/*.bak

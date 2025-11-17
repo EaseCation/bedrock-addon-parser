@@ -21,6 +21,7 @@ export interface StandardAddon {
   blocks: StandardBlock[];
   items: StandardItem[];
   entities: StandardEntity[];
+  biomes: StandardBiome[];
   metadata: AddonMetadata;
 }
 
@@ -453,6 +454,147 @@ export interface ItemMetadata {
 }
 
 export interface EntityMetadata {
+  sourceVersion: string;
+  upgradePath: string[];
+  warnings: string[];
+  sourceFile: string;
+}
+
+/**
+ * 标准化 Biome 定义
+ */
+export interface StandardBiome {
+  // 核心字段
+  identifier: string;
+
+  // 气候属性
+  temperature?: number;
+  downfall?: number;
+  snowAccumulation?: [number, number];
+
+  // 世界生成规则
+  overworldGenerationRules?: OverworldGenerationRules;
+  netherGenerationRules?: NetherGenerationRules;
+
+  // 高度参数
+  overworldHeight?: OverworldHeight;
+  mountainParameters?: MountainParameters;
+
+  // 地表材质
+  surfaceBuilder?: SurfaceBuilder;
+  surfaceMaterialAdjustments?: SurfaceMaterialAdjustments;
+
+  // 标签
+  tags?: string[];
+
+  // 保留完整组件
+  components?: Record<string, any>;
+
+  // 元数据
+  metadata: BiomeMetadata;
+}
+
+/**
+ * Overworld 生成规则
+ */
+export interface OverworldGenerationRules {
+  generateForClimates?: ClimateGeneration[];
+  hillsTransformation?: string;
+  mutateTransformation?: string;
+  riverTransformation?: string;
+  shoreTransformation?: string;
+}
+
+/**
+ * 气候生成配置
+ */
+export interface ClimateGeneration {
+  climate: 'medium' | 'warm' | 'lukewarm' | 'cold' | 'frozen';
+  weight?: number;
+}
+
+/**
+ * Nether 生成规则
+ */
+export interface NetherGenerationRules {
+  targetTemperature?: number;
+  targetHumidity?: number;
+  targetAltitude?: number;
+  targetWeirdness?: number;
+  weight?: number;
+}
+
+/**
+ * Overworld 高度参数
+ */
+export interface OverworldHeight {
+  noiseType?: string;
+  noiseParams?: [number] | [number, number];
+}
+
+/**
+ * 山地参数
+ */
+export interface MountainParameters {
+  peaksFactor?: number;
+  steepMaterialAdjustment?: SteepMaterialAdjustment;
+  topSlide?: TopSlide;
+}
+
+/**
+ * 陡峭材质调整
+ */
+export interface SteepMaterialAdjustment {
+  material?: string;
+  northSlopes?: boolean;
+  southSlopes?: boolean;
+  eastSlopes?: boolean;
+  westSlopes?: boolean;
+}
+
+/**
+ * 顶部滑动参数
+ */
+export interface TopSlide {
+  enabled?: boolean;
+}
+
+/**
+ * 地表构建器
+ */
+export interface SurfaceBuilder {
+  type?: string;
+  topMaterial?: string;
+  midMaterial?: string;
+  seaFloorMaterial?: string;
+  foundationMaterial?: string;
+  seaMaterial?: string;
+  seaFloorDepth?: number;
+}
+
+/**
+ * 地表材质调整
+ */
+export interface SurfaceMaterialAdjustments {
+  adjustments?: SurfaceMaterialAdjustment[];
+}
+
+/**
+ * 单个地表材质调整
+ */
+export interface SurfaceMaterialAdjustment {
+  heightRange?: [number, number];
+  noiseRange?: [number, number];
+  materials?: {
+    topMaterial?: string;
+    midMaterial?: string;
+    seaFloorMaterial?: string;
+    foundationMaterial?: string;
+    seaMaterial?: string;
+  };
+}
+
+export interface BiomeMetadata {
   sourceVersion: string;
   upgradePath: string[];
   warnings: string[];

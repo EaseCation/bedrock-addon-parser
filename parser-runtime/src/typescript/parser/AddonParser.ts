@@ -4,7 +4,7 @@
  * 负责识别文件类型、调用对应的解析器、汇总结果
  */
 
-import type { JsonFile, StandardAddon, StandardBlock, StandardItem, StandardEntity } from '../index';
+import type { JsonFile, StandardAddon, StandardBlock, StandardItem, StandardEntity, StandardBiome } from '../index';
 import { BlockParser } from './BlockParser';
 import { BlockUpgrader } from '../upgrader/BlockUpgrader';
 import { BlockConverter } from '../converter/BlockConverter';
@@ -14,6 +14,9 @@ import { ItemConverter } from '../converter/ItemConverter';
 import { EntityParser } from './EntityParser';
 import { EntityUpgrader } from '../upgrader/EntityUpgrader';
 import { EntityConverter } from '../converter/EntityConverter';
+import { BiomeParser } from './BiomeParser';
+import { BiomeUpgrader } from '../upgrader/BiomeUpgrader';
+import { BiomeConverter } from '../converter/BiomeConverter';
 import { createLogger } from '../utils/logger';
 
 const logger = createLogger('AddonParser');
@@ -26,6 +29,7 @@ export class AddonParser {
     const blocks: StandardBlock[] = [];
     const items: StandardItem[] = [];
     const entities: StandardEntity[] = [];
+    const biomes: StandardBiome[] = [];
     const warnings: string[] = [];
 
     // 遍历所有文件
@@ -93,7 +97,7 @@ export class AddonParser {
             const upgraded = EntityUpgrader.upgradeToLatest(parsed.data, parsed.version);
 
             // 3. 转换为标准化格式
-            const standardEntities = EntityConverter.convertToStandard(upgraded.data, {
+            const standardEntities = EntityConverter.toStandard(upgraded.data, {
               sourceVersion: parsed.version,
               upgradePath: upgraded.upgradePath,
               warnings: upgraded.warnings,
@@ -103,6 +107,36 @@ export class AddonParser {
             entities.push(...standardEntities);
             warnings.push(...upgraded.warnings);
             logger.debug(`[AddonParser] Successfully parsed entity: ${file.path}`);
+            break;
+          }
+
+          case 'biome': {
+            // 1. 解析 Biome
+            const biomeParser = new BiomeParser();
+            const parsed = biomeParser.parseBiome(file.content, file.path);
+
+            // 2. 升级到最新版本
+            const upgraded = BiomeUpgrader.upgradeToLatest(parsed.data, parsed.version);
+
+            // 3. 处理可能是数组的情况（字典结构拆分为多个 biome）
+            const biomesToConvert = Array.isArray(upgraded.data) ? upgraded.data : [upgraded.data];
+
+            // 4. 转换为标准化格式
+            for (const biomeData of biomesToConvert) {
+              const standardBiomes = BiomeConverter.convertToStandard(biomeData, {
+                sourceVersion: parsed.version,
+                upgradePath: upgraded.upgradePath,
+                warnings: upgraded.warnings,
+                sourceFile: file.path
+              });
+
+              biomes.push(...standardBiomes);
+            }
+
+            warnings.push(...upgraded.warnings);
+            logger.debug(
+              `[AddonParser] Successfully parsed ${biomesToConvert.length} biome(s) from: ${file.path}`
+            );
             break;
           }
         }
@@ -117,6 +151,7 @@ export class AddonParser {
       blocks,
       items,
       entities,
+      biomes,
       metadata: {
         totalFiles: files.length,
         warnings
@@ -127,13 +162,14 @@ export class AddonParser {
   /**
    * 检测文件类型
    */
-  private detectFileType(filePath: string): 'block' | 'item' | 'entity' | null {
+  private detectFileType(filePath: string): 'block' | 'item' | 'entity' | 'biome' | null {
     const normalized = filePath.toLowerCase().replace(/\\/g, '/');
 
     // 支持 "blocks/" 和 "/blocks/" 两种形式
     if (normalized.includes('/blocks/') || normalized.startsWith('blocks/')) return 'block';
     if (normalized.includes('/items/') || normalized.startsWith('items/')) return 'item';
     if (normalized.includes('/entities/') || normalized.startsWith('entities/')) return 'entity';
+    if (normalized.includes('/biomes/') || normalized.startsWith('biomes/')) return 'biome';
 
     return null;
   }

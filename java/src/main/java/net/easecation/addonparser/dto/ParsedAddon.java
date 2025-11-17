@@ -1,6 +1,7 @@
 package net.easecation.addonparser.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import net.easecation.addonparser.dto.biome.StandardBiome;
 import net.easecation.addonparser.dto.block.StandardBlock;
 import net.easecation.addonparser.dto.entity.StandardEntity;
 import net.easecation.addonparser.dto.item.StandardItem;
@@ -17,6 +18,7 @@ public record ParsedAddon(
         @JsonProperty("blocks") List<StandardBlock> blocks,
         @JsonProperty("items") List<StandardItem> items,
         @JsonProperty("entities") List<StandardEntity> entities,
+        @JsonProperty("biomes") List<StandardBiome> biomes,
         @JsonProperty("metadata") AddonMetadata metadata
 ) {
     /**

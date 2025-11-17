@@ -13,7 +13,7 @@ describe('AddonParser', () => {
   function loadTestFile(type: string, version: string, filename: string): string {
     const filePath = path.join(
       __dirname,
-      `../resources/${type}`,
+      `resources/${type}`,
       version,
       filename
     );
@@ -51,7 +51,7 @@ describe('AddonParser', () => {
   });
 
   describe('Block 端到端测试', () => {
-    test('should parse simple v1.19.40 block and upgrade to v1.21.60', () => {
+    test('should parse simple v1.19.40 block and upgrade to v1.21.120', () => {
       const files: JsonFile[] = [
         {
           path: 'blocks/simple_block.json',
@@ -72,7 +72,7 @@ describe('AddonParser', () => {
 
       // 验证元数据
       expect(block.metadata.sourceVersion).toBe('1.19.40');
-      expect(block.metadata.upgradePath).toContain('1.21.60');
+      expect(block.metadata.upgradePath).toContain('1.21.120');
       expect(block.metadata.sourceFile).toBe('blocks/simple_block.json');
     });
 
@@ -120,11 +120,11 @@ describe('AddonParser', () => {
       expect(block.metadata.sourceVersion).toBe('1.19.50');
     });
 
-    test('should parse v1.21.60 block (already latest version)', () => {
+    test('should parse v1.21.120 block (already latest version)', () => {
       const files: JsonFile[] = [
         {
           path: 'blocks/simple_block.json',
-          content: loadTestFile('blocks', 'v1_21_60', 'simple_block.json')
+          content: loadTestFile('blocks', 'v1_21_120', 'simple_block.json')
         }
       ];
 
@@ -135,8 +135,8 @@ describe('AddonParser', () => {
 
       const block = parsed.blocks[0];
       expect(block.identifier).toBe('mypack:simple_stone');
-      expect(block.metadata.sourceVersion).toBe('1.21.60');
-      expect(block.metadata.upgradePath).toEqual(['1.21.60']); // 无升级
+      expect(block.metadata.sourceVersion).toBe('1.21.120');
+      expect(block.metadata.upgradePath).toEqual(['1.21.120']); // 无升级
     });
 
     test('should parse multiple blocks from different versions', () => {
@@ -191,7 +191,7 @@ describe('AddonParser', () => {
   });
 
   describe('Item 端到端测试', () => {
-    test('should parse simple v1.19.0 item and upgrade to v1.21.60', () => {
+    test('should parse simple v1.19.0 item and upgrade to v1.21.120', () => {
       const files: JsonFile[] = [
         {
           path: 'items/simple_item.json',
@@ -210,7 +210,7 @@ describe('AddonParser', () => {
 
       // 验证元数据
       expect(item.metadata.sourceVersion).toBe('1.19.0');
-      expect(item.metadata.upgradePath).toContain('1.21.60');
+      expect(item.metadata.upgradePath).toContain('1.21.120');
       expect(item.metadata.sourceFile).toBe('items/simple_item.json');
     });
 
@@ -255,11 +255,11 @@ describe('AddonParser', () => {
       expect(item.metadata.sourceVersion).toBe('1.20.81');
     });
 
-    test('should parse v1.21.60 item with compostable component', () => {
+    test('should parse v1.21.120 item with compostable component', () => {
       const files: JsonFile[] = [
         {
           path: 'items/organic_food.json',
-          content: loadTestFile('items', 'v1_21_60', 'simple_item.json')
+          content: loadTestFile('items', 'v1_21_120', 'simple_item.json')
         }
       ];
 
@@ -275,7 +275,7 @@ describe('AddonParser', () => {
       expect(item.isCompostable).toBe(true);
       expect(item.compostChance).toBe(0.65);
       expect(item.rarity).toBe('uncommon');
-      expect(item.metadata.sourceVersion).toBe('1.21.60');
+      expect(item.metadata.sourceVersion).toBe('1.21.120');
     });
 
     test('should parse multiple items from different versions', () => {

@@ -122,11 +122,8 @@ async function generateForVersion(
       });
 
       // 生成类型
-      if (options.module) {
-        await generator.generateModule(moduleName);
-      } else {
-        await generator.generate();
-      }
+      // 始终使用 generateModule 确保只生成指定模块
+      await generator.generateModule(moduleName);
     });
 
     console.log(chalk.green(`  ✅ 完成`));

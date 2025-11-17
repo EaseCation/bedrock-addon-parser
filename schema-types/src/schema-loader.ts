@@ -110,6 +110,20 @@ export class SchemaLoader {
             filePath = decodeURIComponent(filePath);
           }
 
+          // 【修复】仅允许读取 source 目录下的文件，避免读取编译产物 (behavior/ 和 resource/ 根目录)
+          // 规范化路径以确保比较准确
+          const normalizedPath = path.normalize(filePath);
+          const normalizedBase = path.normalize(this.schemaBaseDir);
+
+          // 检查文件是否在 schemaBaseDir（source/）下
+          if (!normalizedPath.startsWith(normalizedBase)) {
+            throw new Error(
+              `拒绝读取 source 目录外的文件: ${filePath}\n` +
+              `仅允许读取: ${this.schemaBaseDir} 及其子目录\n` +
+              `这可能是 $RefParser 错误地解析了编译产物文件 (behavior/*.json 或 resource/*.json)`
+            );
+          }
+
           const content = await fs.readFile(filePath, 'utf-8');
           const parsed = JSON5.parse(content);
 

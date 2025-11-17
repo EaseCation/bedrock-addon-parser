@@ -19,7 +19,7 @@ describe('ItemParser', () => {
   function loadTestFile(version: string, filename: string): string {
     const filePath = path.join(
       __dirname,
-      '../resources/items',
+      'resources/items',
       version,
       filename
     );
@@ -109,11 +109,11 @@ describe('ItemParser', () => {
       expect(components['minecraft:enchantable']).toBeDefined();
     });
 
-    test('should parse v1.21.60 item with compostable component', () => {
-      const json = loadTestFile('v1_21_60', 'simple_item.json');
+    test('should parse v1.21.120 item with compostable component', () => {
+      const json = loadTestFile('v1_21_120', 'simple_item.json');
       const result = parser.parseItem(json, 'items/simple_item.json');
 
-      expect(result.version).toBe('1.21.60');
+      expect(result.version).toBe('1.21.120');
       expect(result.identifier).toBe('mypack:organic_food');
 
       const components = result.data['minecraft:item'].components;

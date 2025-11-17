@@ -11,8 +11,11 @@
     "build:webpack": "webpack",
     "dev": "tsc --watch",
     "test": "jest",
-    "test:watch": "jest --watch",
+    "test:unit": "jest --selectProjects unit",
+    "test:integration": "jest --selectProjects integration",
+    "test:watch": "jest --watch --selectProjects unit",
     "test:coverage": "jest --coverage",
+    "test:ci": "jest --ci --coverage --maxWorkers=2",
     "lint": "eslint src/**/*.ts",
     "clean": "rm -rf dist node_modules"
   },

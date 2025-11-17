@@ -12,7 +12,7 @@ describe('BlockConverter', () => {
   function createMetadata() {
     return {
       sourceVersion: '1.19.40',
-      upgradePath: ['1.19.40', '1.19.50', '1.21.60'],
+      upgradePath: ['1.19.40', '1.19.50', '1.21.120'],
       warnings: [],
       sourceFile: 'blocks/test_block.json'
     };
@@ -376,7 +376,7 @@ describe('BlockConverter', () => {
     test('should build metadata correctly', () => {
       const metadata = {
         sourceVersion: '1.19.40',
-        upgradePath: ['1.19.40', '1.19.50', '1.20.10', '1.21.60'],
+        upgradePath: ['1.19.40', '1.19.50', '1.20.10', '1.21.120'],
         warnings: ['Warning 1', 'Warning 2'],
         sourceFile: 'blocks/custom_block.json'
       };
@@ -397,7 +397,7 @@ describe('BlockConverter', () => {
 
     test('should return empty array when minecraft:block is missing', () => {
       const blockData = {
-        format_version: '1.21.60'
+        format_version: '1.21.120'
       };
 
       const result = BlockConverter.convertToStandard(blockData, createMetadata());

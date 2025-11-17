@@ -24,7 +24,7 @@ describe('EntityConverter', () => {
    * 辅助函数：加载测试资源文件
    */
   function loadTestResource(filename: string): any {
-    const filePath = path.join(__dirname, '../resources/entities/v1_21_60', filename);
+    const filePath = path.join(__dirname, 'resources/entities/v1_21_60', filename);
     const content = fs.readFileSync(filePath, 'utf-8');
     return JSON.parse(content);
   }
@@ -32,7 +32,7 @@ describe('EntityConverter', () => {
   describe('convertToStandard - 基础功能', () => {
     test('should convert minimal entity correctly', () => {
       const entityData = loadTestResource('minimal_entity.json');
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
 
       expect(result.length).toBe(1);
       const entity = result[0];
@@ -55,7 +55,7 @@ describe('EntityConverter', () => {
         }
       };
 
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
       const entity = result[0];
 
       expect(entity.identifier).toBe('test:core_mob');
@@ -68,7 +68,7 @@ describe('EntityConverter', () => {
 
     test('should return empty array when minecraft:entity is missing', () => {
       const entityData = { format_version: '1.21.60' };
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
 
       expect(result.length).toBe(0);
     });
@@ -81,7 +81,7 @@ describe('EntityConverter', () => {
         }
       };
 
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
 
       expect(result.length).toBe(0);
     });
@@ -100,7 +100,7 @@ describe('EntityConverter', () => {
         }
       };
 
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
       expect(result[0].displayName).toBe('Custom Mob Name');
     });
 
@@ -116,7 +116,7 @@ describe('EntityConverter', () => {
         }
       };
 
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
       expect(result[0].displayName).toBe('Always Visible Name');
     });
 
@@ -133,7 +133,7 @@ describe('EntityConverter', () => {
         }
       };
 
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
       expect(result[0].displayName).toBe('Priority Name');
     });
   });
@@ -152,7 +152,7 @@ describe('EntityConverter', () => {
         }
       };
 
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
       const entity = result[0];
 
       expect(entity.maxHealth).toBe(20);
@@ -172,7 +172,7 @@ describe('EntityConverter', () => {
         }
       };
 
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
       const entity = result[0];
 
       expect(entity.maxHealth).toBe(30);
@@ -194,7 +194,7 @@ describe('EntityConverter', () => {
         }
       };
 
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
       const entity = result[0];
 
       expect(entity.collisionBox).toEqual({
@@ -215,7 +215,7 @@ describe('EntityConverter', () => {
         }
       };
 
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
       expect(result[0].collisionBox).toBeUndefined();
     });
 
@@ -231,7 +231,7 @@ describe('EntityConverter', () => {
         }
       };
 
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
       expect(result[0].scale).toBe(1.5);
     });
 
@@ -245,7 +245,7 @@ describe('EntityConverter', () => {
         }
       };
 
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
       expect(result[0].isPushable).toBe(true);
     });
   });
@@ -263,7 +263,7 @@ describe('EntityConverter', () => {
         }
       };
 
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
       expect(result[0].movementSpeed).toBe(0.35);
     });
 
@@ -279,7 +279,7 @@ describe('EntityConverter', () => {
         }
       };
 
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
       expect(result[0].flyingSpeed).toBe(0.2);
     });
 
@@ -293,7 +293,7 @@ describe('EntityConverter', () => {
         }
       };
 
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
       expect(result[0].canFly).toBe(true);
     });
   });
@@ -311,7 +311,7 @@ describe('EntityConverter', () => {
         }
       };
 
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
       expect(result[0].attackDamage).toBe(5.0);
     });
 
@@ -327,7 +327,7 @@ describe('EntityConverter', () => {
         }
       };
 
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
       expect(result[0].attackRange).toBe(3.0);
     });
 
@@ -343,7 +343,7 @@ describe('EntityConverter', () => {
         }
       };
 
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
       expect(result[0].knockbackResistance).toBe(0.8);
     });
 
@@ -359,7 +359,7 @@ describe('EntityConverter', () => {
         }
       };
 
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
       expect(result[0].followRange).toBe(32.0);
     });
   });
@@ -377,7 +377,7 @@ describe('EntityConverter', () => {
         }
       };
 
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
       expect(result[0].families).toEqual(['mob', 'zombie', 'undead']);
     });
 
@@ -393,7 +393,7 @@ describe('EntityConverter', () => {
         }
       };
 
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
       expect(result[0].families).toEqual(['mob']);
     });
 
@@ -409,7 +409,7 @@ describe('EntityConverter', () => {
         }
       };
 
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
       expect(result[0].families).toEqual(['mob', 'zombie', 'undead']);
     });
   });
@@ -428,7 +428,7 @@ describe('EntityConverter', () => {
         }
       };
 
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
       const entity = result[0];
 
       expect(entity.isTameable).toBe(true);
@@ -449,7 +449,7 @@ describe('EntityConverter', () => {
         }
       };
 
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
       expect(result[0].lootTable).toBe('loot_tables/entities/zombie.json');
     });
 
@@ -463,7 +463,7 @@ describe('EntityConverter', () => {
         }
       };
 
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
       expect(result[0].experienceReward).toBe(10);
     });
 
@@ -479,7 +479,7 @@ describe('EntityConverter', () => {
         }
       };
 
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
       expect(result[0].experienceReward).toBe(5);
     });
 
@@ -498,7 +498,7 @@ describe('EntityConverter', () => {
         }
       };
 
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
       expect(result[0].experienceReward).toBe(3);
     });
   });
@@ -517,7 +517,7 @@ describe('EntityConverter', () => {
         }
       };
 
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
       const entity = result[0];
 
       expect(entity.fireImmune).toBe(true);
@@ -540,7 +540,7 @@ describe('EntityConverter', () => {
         }
       };
 
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
       const entity = result[0];
 
       expect(entity.isBaby).toBe(true);
@@ -552,7 +552,7 @@ describe('EntityConverter', () => {
   describe('convertToStandard - 完整结构保留', () => {
     test('should preserve complete components', () => {
       const entityData = loadTestResource('complete_entity.json');
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
 
       expect(result[0].components).toBeDefined();
       expect(result[0].components!['minecraft:health']).toBeDefined();
@@ -561,7 +561,7 @@ describe('EntityConverter', () => {
 
     test('should preserve component_groups', () => {
       const entityData = loadTestResource('entity_with_groups_events.json');
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
 
       expect(result[0].componentGroups).toBeDefined();
       expect(result[0].componentGroups!['test:adult_group']).toBeDefined();
@@ -571,7 +571,7 @@ describe('EntityConverter', () => {
 
     test('should preserve events', () => {
       const entityData = loadTestResource('entity_with_groups_events.json');
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
 
       expect(result[0].events).toBeDefined();
       expect(result[0].events!['test:grow_up']).toBeDefined();
@@ -581,14 +581,14 @@ describe('EntityConverter', () => {
 
     test('should handle entity without component_groups', () => {
       const entityData = loadTestResource('minimal_entity.json');
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
 
       expect(result[0].componentGroups).toBeUndefined();
     });
 
     test('should handle entity without events', () => {
       const entityData = loadTestResource('minimal_entity.json');
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
 
       expect(result[0].events).toBeUndefined();
     });
@@ -610,7 +610,7 @@ describe('EntityConverter', () => {
         }
       };
 
-      const result = EntityConverter.convertToStandard(entityData, metadata);
+      const result = EntityConverter.toStandard(entityData, metadata);
       expect(result[0].metadata).toEqual(metadata);
     });
   });
@@ -618,7 +618,7 @@ describe('EntityConverter', () => {
   describe('convertToStandard - 集成测试', () => {
     test('should convert complete entity with all fields', () => {
       const entityData = loadTestResource('complete_entity.json');
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
 
       expect(result.length).toBe(1);
       const entity = result[0];
@@ -684,7 +684,7 @@ describe('EntityConverter', () => {
 
     test('should convert entity with component_groups and events', () => {
       const entityData = loadTestResource('entity_with_groups_events.json');
-      const result = EntityConverter.convertToStandard(entityData, createMetadata());
+      const result = EntityConverter.toStandard(entityData, createMetadata());
 
       const entity = result[0];
       expect(entity.identifier).toBe('test:transforming_mob');
@@ -700,7 +700,7 @@ describe('EntityConverter', () => {
       const entityData = loadTestResource('minimal_entity.json');
 
       const start = Date.now();
-      EntityConverter.convertToStandard(entityData, createMetadata());
+      EntityConverter.toStandard(entityData, createMetadata());
       const duration = Date.now() - start;
 
       expect(duration).toBeLessThan(10);
@@ -710,7 +710,7 @@ describe('EntityConverter', () => {
       const entityData = loadTestResource('complete_entity.json');
 
       const start = Date.now();
-      EntityConverter.convertToStandard(entityData, createMetadata());
+      EntityConverter.toStandard(entityData, createMetadata());
       const duration = Date.now() - start;
 
       expect(duration).toBeLessThan(15);
@@ -720,7 +720,7 @@ describe('EntityConverter', () => {
       const entityData = loadTestResource('entity_with_groups_events.json');
 
       const start = Date.now();
-      EntityConverter.convertToStandard(entityData, createMetadata());
+      EntityConverter.toStandard(entityData, createMetadata());
       const duration = Date.now() - start;
 
       expect(duration).toBeLessThan(15);
