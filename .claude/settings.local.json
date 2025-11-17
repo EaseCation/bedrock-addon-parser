@@ -21,7 +21,15 @@
       "Bash(npm test:*)",
       "WebFetch(domain:api.github.com)",
       "Bash(npx tsc:*)",
-      "Bash(echo:*)"
+      "Bash(echo:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(git checkout:*)",
+      "Bash(for commit in \"00e0afdf84e0bd9cb11d9bd5fd554602dafaf82b\" \"34bdb84ad08992cfb825c2bfd5210d603288eaf6\" \"89b4fa1c14f5e74678f5204af60d7c85e5264e1b\" \"5cef295e5438732d36f317367e4eb15534604a1e\" \"8b2044d6edfd436cb3bd284789a58c7cc1bf710d\")",
+      "Bash(do echo \"=== $commit ===\")",
+      "Bash(done)",
+      "Bash(npm run generate:*)",
+      "Bash(tee:*)",
+      "Bash(git stash:*)"
     ],
     "deny": [],
     "ask": []

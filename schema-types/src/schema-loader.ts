@@ -132,11 +132,14 @@ export class SchemaLoader {
         }
       };
 
-      // 使用 bundle() 保持引用结构（支持 URL 解码）
+      // 使用 bundle() 保持引用结构，但配置循环引用处理
       const result = await $RefParser.bundle(schemaInfo.filePath, {
         resolve: {
           file: customReader,
           http: false
+        },
+        dereference: {
+          circular: 'ignore'  // 遇到循环引用时保留 $ref
         }
       });
 
@@ -166,10 +169,87 @@ export class SchemaLoader {
     // 深拷贝避免修改原始对象
     const patched = JSON.parse(JSON.stringify(schema));
 
-    // 修补 groups_spec 的自引用：array.items 从引用自己改为引用 filters_spec
-    if (patched.definitions?.groups_spec?.oneOf?.[0]?.items?.$ref === '#/definitions/groups_spec') {
-      console.log(chalk.yellow(`🔧 自动修补循环引用: ${path.relative(this.schemaBaseDir, filePath)}`));
-      patched.definitions.groups_spec.oneOf[0].items.$ref = '#/definitions/filters_spec';
+    if (!patched.definitions?.groups_spec) {
+      return patched;
+    }
+
+    console.log(chalk.yellow(`🔧 自动修补循环引用: ${path.relative(this.schemaBaseDir, filePath)}`));
+
+    /**
+     * 递归替换所有对 groups_spec 的引用为内联的简化结构
+     * 这样可以完全避免 $ref 解析器遇到循环引用
+     */
+    const replaceGroupsRef = (obj: any, depth: number = 0): any => {
+      const MAX_DEPTH = 3;
+
+      if (!obj || typeof obj !== 'object') {
+        return obj;
+      }
+
+      if (Array.isArray(obj)) {
+        return obj.map(item => replaceGroupsRef(item, depth));
+      }
+
+      const result: any = {};
+      for (const [key, value] of Object.entries(obj)) {
+        // 如果遇到对 groups_spec 的引用
+        if (key === '$ref' && typeof value === 'string' && value.includes('groups_spec')) {
+          // 不使用 $ref，直接内联简化的结构
+          if (depth >= MAX_DEPTH) {
+            // 达到深度限制，返回宽松类型（删除 $ref，使用 inline 定义）
+            delete result['$ref'];
+            Object.assign(result, {
+              oneOf: [
+                { type: 'array', items: {} },
+                { type: 'object' }
+              ]
+            });
+          } else {
+            // 内联展开一层
+            delete result['$ref'];
+            Object.assign(result, {
+              oneOf: [
+                {
+                  type: 'array',
+                  items: {
+                    oneOf: [
+                      { type: 'array', items: {} },
+                      { type: 'object', $ref: '#/definitions/filters_spec' }
+                    ]
+                  }
+                },
+                { type: 'object', $ref: '#/definitions/filters_spec' }
+              ]
+            });
+          }
+        } else {
+          result[key] = replaceGroupsRef(value, depth + 1);
+        }
+      }
+      return result;
+    };
+
+    // 1. 将 groups_spec 替换为简化的非递归版本
+    patched.definitions.groups_spec = {
+      oneOf: [
+        {
+          type: 'array',
+          items: {
+            oneOf: [
+              { type: 'array', items: {} },
+              { type: 'object', $ref: '#/definitions/filters_spec' }
+            ]
+          }
+        },
+        { type: 'object', $ref: '#/definitions/filters_spec' }
+      ]
+    };
+
+    // 2. 递归替换 filters_spec 内部所有对 groups_spec 的引用
+    if (patched.definitions.filters_spec) {
+      patched.definitions.filters_spec = replaceGroupsRef(
+        patched.definitions.filters_spec
+      );
     }
 
     return patched;

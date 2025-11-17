@@ -42,3 +42,5 @@ java/src/main/resources/bundle.js
 # Backup files
 *.bak
 **/*.bak
+
+manual-test.ts

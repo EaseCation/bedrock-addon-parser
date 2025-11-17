@@ -5,9 +5,69 @@
   "modules": {
     "items": [
       {
+        "format_version": "1.10.0",
+        "commit": "bb8481c6c4f219ee3c92ce57e6fd5a3870405343",
+        "notes": "MC 1.10.0 - Flattened 1.10.0 entities (schema 可能不完整)"
+      },
+      {
+        "format_version": "1.11.0",
+        "commit": "4867731c9a31cbd64c7e604343e48c386a811318",
+        "notes": "MC 1.11.0 - Flattened 1.11.0 (schema 可能不完整)"
+      },
+      {
+        "format_version": "1.12.0",
+        "commit": "4867731c9a31cbd64c7e604343e48c386a811318",
+        "notes": "MC 1.12.0 - Flattened 1.11.0 (包含 1.12.0, schema 可能不完整)"
+      },
+      {
+        "format_version": "1.13.0",
+        "commit": "4fb40617b4971386ea8e7becd8dd21b9ed3d2445",
+        "notes": "MC 1.13.0 - Flattened 1.13.0 (schema 可能不完整)"
+      },
+      {
+        "format_version": "1.14.0",
+        "commit": "13586305376927c7fe62582dd0120824d9aac43a",
+        "notes": "MC 1.14.0 - Flattened 1.14 (schema 可能不完整)"
+      },
+      {
+        "format_version": "1.16.0",
+        "commit": "1dfd97d95de6478a56907ba8f01b224826374bc3",
+        "notes": "MC 1.16.0 - Flattened 1.16.0 (2021-10)"
+      },
+      {
+        "format_version": "1.16.100",
+        "commit": "8eba7f4531cc5a482dd5b20ce3cc7f640867223e",
+        "notes": "MC 1.16.100 - Flattened 1.16.100 (2021-10)"
+      },
+      {
+        "format_version": "1.17.0",
+        "commit": "f3e1ffaf2f852b68344fc37d8f235b36588f9e2c",
+        "notes": "MC 1.17.0 - Flattened 1.17.0 (2021-10)"
+      },
+      {
+        "format_version": "1.17.40",
+        "commit": "8b2044d6edfd436cb3bd284789a58c7cc1bf710d",
+        "notes": "MC 1.17.40 (2021-10-21)"
+      },
+      {
+        "format_version": "1.18.0",
+        "commit": "5cef295e5438732d36f317367e4eb15534604a1e",
+        "notes": "MC 1.18.0 (2022-02-04)"
+      },
+      {
+        "format_version": "1.18.10",
+        "commit": "89b4fa1c14f5e74678f5204af60d7c85e5264e1b",
+        "notes": "MC 1.18.10 (2022-02-08)"
+      },
+      {
+        "format_version": "1.18.30",
+        "commit": "34bdb84ad08992cfb825c2bfd5210d603288eaf6",
+        "notes": "MC 1.18.30 (2022-04-20)"
+      },
+      {
         "format_version": "1.19.0",
         "commit": "c8128d1e1267d25ddf429ad64a5261b4c77f2087",
-        "notes": "MC 1.19.0 - 最早可追溯版本 (2022-08-05)"
+        "notes": "MC 1.19.0 (2022-08-05)"
       },
       {
         "format_version": "1.19.40",
